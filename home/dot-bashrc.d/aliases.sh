@@ -1,0 +1,56 @@
+# Package management related stuff
+alias inst='sudo dnf -y install'
+alias uninst='sudo dnf -y remove'
+alias upt='sudo dnf -y update'
+alias ds='sudo dnf search'
+
+# Configuration files
+alias zshrc='nvim ~/.zshrc'
+alias i3rc='nvim ~/.config/i3/config'
+alias ra='. ranger'
+alias cal='calcurse'
+
+# Git aliases
+alias ga='git add .'
+alias gc='git commit'
+alias gs='git status'
+alias gd='git diff | bat'
+
+# Navigation and file operations
+alias lx='eza -alhG --group-directories-first'
+alias cd.='cd ../'
+alias cd..='cd ../../'
+alias x='xdg-open'
+alias kdiff="kitty +kitten diff"
+alias mv='mv -v'
+alias mvr='bash "/home/adam/code/scripts/move_recent_downloads.sh"'
+alias cpp='rsync -r --info=progress2 '
+alias rf='rm -r -f'
+
+# Other
+alias v='xclip -selection clipboard -o'
+alias c='xclip -selection clipboard'
+alias s="grep -i --color"
+alias e='exit'
+alias q='exit'
+alias vix='/bin/vim -x'
+alias vi='nvim'
+alias jar='java -jar'
+alias ka='killall'
+alias hs='history |s'
+alias mp='python3 manage.py'
+alias mr='python3 manage.py runserver'
+alias ms='python3 manage.py shell'
+alias mt='python3 manage.py test'
+alias mm='python3 manage.py migrate'
+alias mmm='python3 manage.py makemigrations'
+alias mount='sudo mount'
+alias umount='sudo umount'
+alias disks='fdisk -l |s dev'
+alias cast="$HOME/code/utils/ytcast -d 17e9374e"
+alias check_keys="xev -event keyboard  | egrep -o 'keycode.*\)'"
+
+alias ncd='cd ~/notes && cd "$(find * -type d | fzf)" && ra'
+alias ccd='cd ~/code && cd "$(find * -type d | fzf)" && ra'
+alias pcd='cd "$(cat ~/additional/editors/projects | fzf)" && ra'
+alias dc='docker compose'
