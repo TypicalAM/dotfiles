@@ -601,6 +601,18 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+require('lspconfig').pylsp.setup {
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          maxLineLength = 120
+        }
+      }
+    }
+  }
+}
+
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -680,6 +692,7 @@ vim.keymap.set('n', ';;', '<Cmd>Telescope buffers<CR>')
 vim.keymap.set('n', ';s', '<Cmd>Telescope lsp_document_symbols<CR>')
 vim.keymap.set('n', ';r', '<Cmd>Telescope lsp_references<CR>')
 vim.keymap.set('n', ';c', '<Cmd>Telescope commands<CR>')
+vim.keymap.set('n', ';g', '<Cmd>Telescope live_grep<CR>')
 
 vim.keymap.set('n', '<C-a>', 'ggVG', { silent = true, desc = 'Select everything' })
 vim.keymap.set('n', '<C-w>', ':bw<CR>', { desc = 'Close tab' })
