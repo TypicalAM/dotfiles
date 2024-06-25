@@ -47,10 +47,5 @@ alias mmm='python3 manage.py makemigrations'
 alias mount='sudo mount'
 alias umount='sudo umount'
 alias disks='fdisk -l |s dev'
-alias cast="$HOME/code/utils/ytcast -d 17e9374e"
 alias check_keys="xev -event keyboard  | egrep -o 'keycode.*\)'"
-
-alias ncd='cd ~/notes && cd "$(find * -type d | fzf)" && ra'
-alias ccd='cd ~/code && cd "$(find * -type d | fzf)" && ra'
-alias pcd='cd "$(cat ~/additional/editors/projects | fzf)" && ra'
 alias dc='docker compose'
