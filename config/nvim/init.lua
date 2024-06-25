@@ -242,6 +242,23 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  -- TODO
+  -- {
+  --   'startup-nvim/startup.nvim',
+  --   dependencies = {
+  --     'nvim-telescope/telescope.nvim',
+  --     'nvim-lua/plenary.nvim'
+  --   },
+  --   config = function()
+  --     vim.g.startup_bookmarks = {
+  --       ["t"] = '~/notes/luzne notatki/todo',
+  --     }
+  --     require "startup".setup(
+  --       { theme = "startify" }
+  --     )
+  --   end
+  -- },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -701,6 +718,19 @@ vim.keymap.set('n', 'M', ':set number!<CR>', { desc = 'Toggle line numbers' })
 vim.keymap.set('n', 'm', ':set wrap!<CR>', { desc = 'Toggle text wrap' })
 vim.keymap.set('n', 'zs', ':w<CR>', { desc = 'Save current file' })
 vim.keymap.set('n', 'zq', ':q!<CR>', { desc = 'Quit' })
+
+local function mark_todo()
+  local todo_root = "/home/adam/notes/luzne notatki/temp"
+  local todo_root_filename = "/home/adam/notes/luzne notatki/todo.md"
+  local name = vim.api.nvim_buf_get_name(0)
+  if name == todo_root_filename then
+    local word_under_cursor = vim.fn.expand('<cword>')
+    local todo_filename = todo_root .. "/" .. word_under_cursor .. ".todo.md"
+    vim.cmd('e ' .. todo_filename)
+  end
+end
+
+vim.keymap.set('n', '<S-CR>', mark_todo, { desc = 'Mark todos' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
