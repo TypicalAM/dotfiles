@@ -51,7 +51,7 @@ bindsym F5 exec --no-startup-id light -U 10
 bindsym F6 exec --no-startup-id light -A 10
 
 # Mute the microphone
-bindsym $mod+grave exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym $mod+grave exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
 # Set the Super key as the defualt modifier
 set $mod Mod4
@@ -69,10 +69,10 @@ bindsym $mod+a focus parent
 bindsym $mod+Tab workspace back_and_forth
 
 # Rotate the screen 90°
-bindcode 104 exec bash ~/code/scripts/rotate_screen.sh
+bindcode 104 exec --no-startup-id bash ~/code/scripts/rotate_screen.sh
 
 # Attach a new screen via hdmi
-bindsym F7 exec bash ~/code/scripts/attach_displays.sh
+bindsym F7 exec --no-startup-id bash ~/code/scripts/attach_displays.sh
 
 # Assign numbers to the windows
 set $ws1 "1"
@@ -112,10 +112,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # Terminal of choice
-bindsym $mod+Return exec ~/code/scripts/kitty_wrapper.sh
+bindsym $mod+Return exec --no-startup-id ~/code/scripts/kitty_wrapper.sh
 
 # Marktext text editor (Fixed for fc36 - gpu sandbox bug)
-bindsym $mod+l exec ~/code/utils/bin/marktext
+bindsym $mod+l exec --no-startup-id ~/code/utils/bin/marktext
 
 # Open todos
 bindsym $mod+t exec ~/code/scripts/todo.sh
@@ -130,7 +130,7 @@ bindsym $mod+g exec bash ~/code/scripts/gist_paster.sh
 bindsym $mod+Shift+w exec sudo bash ~/code/scripts/set_next_os.sh Windows
 
 # Lock screen and hibernate
-bindsym $mod+Shift+h exec ~/.local/bin/betterlockscreen -l & sleep 0.5 && systemctl hibernate
+bindsym $mod+Shift+h exec --no-startup-id ~/.local/bin/betterlockscreen -l & sleep 0.5 && systemctl hibernate
 
 assign [class="Firefox"] $ws1
 
@@ -143,16 +143,16 @@ for_window [class="Remote-viewer"] floating enable
 bindsym $mod+Shift+r restart
 
 # Log out
-bindsym $mod+Shift+e exec i3-msg exit
+bindsym $mod+Shift+e exec --no-startup-id i3-msg exit
 
 # Make a selection screenshot
-bindsym Print exec maim -s | xclip -selection clipboard -t image/png
+bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
 
 # Make a whole screen screenshot
-bindsym $mod+Print exec maim -s "/home/adam/pictures/screenshots/screen-$(date +%s).png"
+bindsym $mod+Print exec --no-startup-id maim -s "/home/adam/pictures/screenshots/screen-$(date +%s).png"
 
 # Check the hex color of the area under the cursor
-bindsym $mod+Shift+Print exec bash ~/code/scripts/hex_color_finder.sh
+bindsym $mod+Shift+Print exec --no-startup-id bash ~/code/scripts/hex_color_finder.sh
 
 # Window resizing mode
 mode "resize" {
@@ -175,12 +175,12 @@ bindsym $mod+r mode "resize"
 
 # VM gamer time
 mode "vm" {
-	bindsym $mod+KP_Up exec xrandr --output eDP --off
-	bindsym $mod+KP_Prior exec xrandr --output eDP --auto
+	bindsym $mod+KP_Up exec --no-startup-id xrandr --output eDP --off
+	bindsym $mod+KP_Prior exec --no-startup-id xrandr --output eDP --auto
 	bindsym $mod+2 workspace $ws2
 
-	bindsym $mod+grave exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-	bindsym F2 exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%-
+	bindsym $mod+grave exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	bindsym F2 exec --no-startup-id --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%-
 	bindsym F3 exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%+
 
 	bindsym $mod+KP_Home mode "default"
@@ -188,28 +188,28 @@ mode "vm" {
 }
 
 
-bindsym $mod+KP_Up exec xrandr --output eDP --off
-bindsym $mod+KP_Prior exec xrandr --output eDP --auto
+bindsym $mod+KP_Up exec --no-startup-id xrandr --output eDP --off
+bindsym $mod+KP_Prior exec --no-startup-id xrandr --output eDP --auto
 bindsym $mod+KP_Home mode "vm"
 
 # Dynamic application launcher
-bindsym $mod+q exec rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/default.rasi
+bindsym $mod+q exec --no-startup-id rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/default.rasi
 #bindsym $mod+q exec ~/.config/rofi/launchers/type-4/launcher.sh
 
 # Dynamic launcher basic
 #bindsym $mod+q exec rofi -no-lazy-grab -show drun
 
 # Bottom bar
-#exec_always bash ~/.config/polybar/launch.sh
-exec_always sh ~/.config/polybar/polybar-themes/onedark-theme/polybar/launch.sh
+exec_always bash ~/.config/polybar/launch.sh
+#exec_always sh ~/.config/polybar/polybar-themes/onedark-theme/polybar/launch.sh
 
 # Notification daemon
-exec_always dunst
+exec_always --no-startup-id dunst
 
 # No hardware beeping
-exec_always xset b off
+exec_always --no-startup-id xset b off
 
 # Get the active wallpaper
-exec_always feh --bg-fill ~/.config/current_wallpaper
+exec_always --no-startup-id feh --bg-fill ~/.config/current_wallpaper
 
-bindsym $mod+Shift+q exec bash ~/code/scripts/start_dev_environment.sh
+bindsym $mod+Shift+q exec --no-startup-id bash ~/code/scripts/start_dev_environment.sh
