@@ -732,6 +732,8 @@ local function mark_todo()
   if name == todo_root_filename then
     local word_under_cursor = vim.fn.expand('<cword>')
     local todo_filename = todo_root .. "/" .. word_under_cursor .. ".todo.md"
+    vim.cmd(':enew')
+    vim.cmd(':bd #')
     vim.cmd('e ' .. todo_filename)
   end
 end
