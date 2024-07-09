@@ -159,10 +159,16 @@ require('lazy').setup({
     'catppuccin/nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'catppuccin-macchiato'
+      --[[       vim.cmd.colorscheme 'catppuccin-macchiato' ]]
     end,
   },
-
+  {
+    'rose-pine/neovim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'rose-pine'
+    end,
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
