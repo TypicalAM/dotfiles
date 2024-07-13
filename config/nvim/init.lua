@@ -34,9 +34,10 @@ require('lazy').setup({
     'akinsho/bufferline.nvim',
     opts = {
       options = {
-        show_close_icon = false,
+        mode = "buffers",
+        show_buffer_close_icons = false,
         always_show_bufferline = false,
-        separator_style = "thick",
+        separator_style = "thin",
       },
     }
   },
@@ -629,7 +630,7 @@ require('lspconfig').pylsp.setup {
     pylsp = {
       plugins = {
         pycodestyle = {
-          maxLineLength = 120
+          maxLineLength = 200
         }
       }
     }
@@ -718,12 +719,15 @@ vim.keymap.set('n', ';c', '<Cmd>Telescope commands<CR>')
 vim.keymap.set('n', ';g', '<Cmd>Telescope live_grep<CR>')
 
 vim.keymap.set('n', '<C-a>', 'ggVG', { silent = true, desc = 'Select everything' })
-vim.keymap.set('n', '<C-w>', ':bw<CR>', { desc = 'Close tab' })
-vim.keymap.set('n', '<TAB>', ':BufferLineCycleNext<CR>', { desc = 'Next tab' })
-vim.keymap.set('n', 'M', ':set number!<CR>', { desc = 'Toggle line numbers' })
-vim.keymap.set('n', 'm', ':set wrap!<CR>', { desc = 'Toggle text wrap' })
-vim.keymap.set('n', 'zs', ':w<CR>', { desc = 'Save current file' })
-vim.keymap.set('n', 'zq', ':q!<CR>', { desc = 'Quit' })
+vim.keymap.set('n', '<C-w>', ':bw<CR>', { silent = true, desc = 'Close tab' })
+vim.keymap.set('n', '<TAB>', ':BufferLineCycleNext<CR>', { silent = true, desc = 'Next tab' })
+vim.keymap.set('n', 'M', ':set number!<CR>', { silent = true, desc = 'Toggle line numbers' })
+vim.keymap.set('n', 'm', ':set wrap!<CR>', { silent = true, desc = 'Toggle text wrap' })
+vim.keymap.set('n', 'zs', ':w<CR>', { silent = true, desc = 'Save current file' })
+vim.keymap.set('n', 'zq', ':q!<CR>', { silent = true, desc = 'Quit' })
+
+vim.keymap.del('n', '<C-w>d')
+vim.keymap.del('n', '<C-w><C-D>')
 
 local function mark_todo()
   local todo_root = "/home/adam/notes/luzne notatki/temp"
@@ -732,9 +736,8 @@ local function mark_todo()
   if name == todo_root_filename then
     local word_under_cursor = vim.fn.expand('<cword>')
     local todo_filename = todo_root .. "/" .. word_under_cursor .. ".todo.md"
-    vim.cmd(':enew')
-    vim.cmd(':bd #')
     vim.cmd('e ' .. todo_filename)
+    vim.opt.showtabline = 0
   end
 end
 
