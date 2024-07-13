@@ -78,6 +78,18 @@ require('lazy').setup({
     },
   },
 
+  {
+    "olexsmir/gopher.nvim",
+    ft = "go",
+    -- branch = "develop", -- if you want develop branch
+    -- keep in mind, it might break everything
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    opts = {},
+  },
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
