@@ -71,3 +71,9 @@ ccd() {
 		cd "$choice" || return
 	fi
 }
+
+temp-diff() {
+	: >/tmp/first_file
+	: >/tmp/second_file
+	nvim /tmp/first_file && nvim /tmp/second_file && kitty +kitten diff /tmp/first_file /tmp/second_file
+}
