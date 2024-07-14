@@ -1,0 +1,80 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "final_space": true,
+  "version": 2,
+  "palette": {
+    "light_gray": "#726e87",
+    "red": "#e66e90",
+    "greenish_blue": "#34738c",
+    "yellow": "#dab074",
+    "light_blue": "#9acbd3",
+    "lavender": "#bda2dd",
+    "peach": "#e0b5b3",
+    "white": "#d7d5ea"
+  },
+  "blocks": [
+    {
+      "alignment": "left",
+      "type": "prompt",
+      "segments": [
+         {
+          "type": "path",
+          "foreground": "p:lavender",
+          "style": "plain",
+          "template": "{{ .Path }} ",
+          "properties": {
+            "folder_separator_icon": "/",
+            "style": "full",
+            "mapped_locations": {
+              "~": ""
+            }
+          }
+        },
+        {
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:peach{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:red{{ end }}",
+            "{{ if gt .Ahead 0 }}p:red{{ end }}",
+            "{{ if gt .Behind 0 }}p:red{{ end }}"
+          ],
+          "foreground": "p:light_gray",
+          "properties": {
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "branch_icon": "git:"
+          },
+          "style": "plain",
+          "template": "{{ .HEAD }}{{ if .Staging.Changed }} {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} {{ .Working.String }}{{ end }}",
+          "type": "git"
+        }
+      ]
+    },
+
+    {
+      "alignment": "left",
+      "type": "prompt",
+      "newline": true,
+      "segments": [
+        {
+          "style": "plain",
+          "foreground": "p:light_blue",
+          "template": "\uf105",
+          "type": "text"
+        }
+      ]
+    },
+
+    {
+      "alignment": "right",
+      "type": "rprompt",
+      "segments": [
+        {
+          "foreground": "p:light_gray",
+          "style": "plain",
+          "template": " {{ .UserName }}@{{ .HostName }} ",
+          "type": "session"
+        }
+      ]
+    }
+  ]
+}
