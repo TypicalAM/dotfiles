@@ -24,7 +24,7 @@ exec_always bash ~/.config/polybar/launch.sh
 exec_always --no-startup-id dunst
 
 # No hardware beeping
-exec_always --no-startup-idx set b off
+exec_always --no-startup-idx xset b off
 
 # Get the active wallpaper
 exec_always feh --bg-fill ~/.config/current_wallpaper
