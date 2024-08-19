@@ -734,7 +734,6 @@ vim.keymap.set('n', '<C-a>', 'ggVG', { silent = true, desc = 'Select everything'
 vim.keymap.set('n', '<C-w>', ':bw<CR>', { silent = true, desc = 'Close tab' })
 vim.keymap.set('n', '<TAB>', ':BufferLineCycleNext<CR>', { silent = true, desc = 'Next tab' })
 vim.keymap.set('n', 'M', ':set number!<CR>', { silent = true, desc = 'Toggle line numbers' })
-vim.keymap.set('n', 'm', ':set wrap!<CR>', { silent = true, desc = 'Toggle text wrap' })
 vim.keymap.set('n', 'zs', ':w<CR>', { silent = true, desc = 'Save current file' })
 vim.keymap.set('n', 'zq', ':q!<CR>', { silent = true, desc = 'Quit' })
 
