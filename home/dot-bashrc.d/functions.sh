@@ -71,6 +71,13 @@ snew() {
 	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
 }
 
+sdef() {
+	local name
+	name="random-$(tr -dc "A-Za-z1-9" </dev/urandom | head -c 5)"
+	TMUX='' tmux new-session -A -s "$name" -d
+	tmux switch-client -t "$name"
+}
+
 ncd() {
 	local choice
 	if choice="$(find -- ~/notes/* -type d | fzf)"; then
