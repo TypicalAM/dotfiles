@@ -1,12 +1,3 @@
-# This is a sample commands.py.  You can add your own commands here.
-#
-# Please refer to commands_full.py for all the default commands and a complete
-# documentation.  Do NOT add them all here, or you may end up with defunct
-# commands when upgrading ranger.
-
-# A simple command for demonstration purposes follows.
-# -----------------------------------------------------------------------------
-
 from __future__ import (absolute_import, division, print_function)
 import os
 import glob
@@ -26,6 +17,24 @@ class nvim(Command):
         else:
             self.fm.execute_console('shell nvim ')
         self.fm.notify('Closed neovim')
+
+    def tab(self, tabnum):
+        return self._tab_directory_content()
+
+
+class xdg(Command):
+    """:xdg
+    Open or create the file with xdg-open
+    """
+
+    def execute(self):
+        from os.path import expanduser, join
+        mypath = join(self.fm.thisdir.path, expanduser(self.rest(1)))
+        if expanduser(self.rest(1)):
+            self.fm.execute_console('shell xdg-open "'+mypath+'"')
+        else:
+            self.fm.execute_console('shell xdg-open ')
+        self.fm.notify('Closed app')
 
     def tab(self, tabnum):
         return self._tab_directory_content()
