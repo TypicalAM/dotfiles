@@ -7,3 +7,12 @@
 [submodule "config/ranger/plugins/ranger-archives"]
 	path = config/ranger/plugins/ranger-archives
 	url = https://github.com/maximtrp/ranger-archives.git
+[submodule "config/tmux/plugins/tmux"]
+	path = config/tmux/plugins/tmux
+	url = https://git::@github.com/catppuccin/tmux
+[submodule "config/tmux/plugins/tmux-sensible"]
+	path = config/tmux/plugins/tmux-sensible
+	url = https://git::@github.com/tmux-plugins/tmux-sensible
+[submodule "config/tmux/plugins/tpm"]
+	path = config/tmux/plugins/tpm
+	url = https://git::@github.com/tmux-plugins/tpm
