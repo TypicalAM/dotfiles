@@ -54,8 +54,21 @@ gotest() {
 pcd() {
 	local choice
 	if choice="$(fzf <~/additional/projects)"; then
-		cd "$choice" || return
+		cd "/home/adam/$choice" || return
 	fi
+}
+
+sw() {
+	tmux switch-client -t "$(tmux list-sessions -F '#{session_name} - #{session_windows} windows #{session_path}' | grep -v 'random' | fzf | cut --delimiter=' ' --fields=1 | sed 's/: .*//g')"
+	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
+}
+
+snew() {
+	local name
+	name="$(fzf --print-query <~/additional/session_names | tail -n 1)"
+	TMUX='' tmux new-session -d -s "$name"
+	tmux switch-client -t "$name"
+	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
 }
 
 ncd() {

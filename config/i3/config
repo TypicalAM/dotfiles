@@ -117,8 +117,8 @@ floating_modifier $mod
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
-# Terminal of choice
-bindsym $mod+Return exec --no-startup-id kitty
+# Terminal of choice with tmux ready
+bindsym $mod+Return exec --no-startup-id kitty -- tmux new-session -A -s random-$(tr -dc "A-Za-z1-9" < /dev/urandom | head -c 5) && tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
 
 # Open todos
 bindsym $mod+t exec ~/code/scripts/todo.sh
