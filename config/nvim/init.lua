@@ -533,7 +533,8 @@ local on_attach = function(_, bufnr)
   nmap('gn', vim.lsp.buf.rename, 'Rename')
   nmap('ga', vim.lsp.buf.code_action, 'Code Action')
 
-  --nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+  nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+  nmap('<C-[>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
   nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
   --nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   --nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
@@ -753,6 +754,7 @@ local function mark_todo()
   end
 end
 
+vim.keymap.set('n', '<C-]>', mark_todo, { desc = 'Mark todos' })
 vim.keymap.set('n', '<S-CR>', mark_todo, { desc = 'Mark todos' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
