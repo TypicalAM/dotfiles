@@ -172,14 +172,14 @@ require('lazy').setup({
     'catppuccin/nvim',
     priority = 1000,
     config = function()
-      --[[       vim.cmd.colorscheme 'catppuccin-macchiato' ]]
+      vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
   },
   {
     'rose-pine/neovim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'rose-pine'
+      --[[       vim.cmd.colorscheme 'rose-pine' ]]
     end,
   },
   {
@@ -533,7 +533,8 @@ local on_attach = function(_, bufnr)
   nmap('gn', vim.lsp.buf.rename, 'Rename')
   nmap('ga', vim.lsp.buf.code_action, 'Code Action')
 
-  nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+  --nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+  nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
   --nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   --nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   --nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
