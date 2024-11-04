@@ -739,8 +739,8 @@ vim.keymap.set('n', 'M', ':set number!<CR>', { silent = true, desc = 'Toggle lin
 vim.keymap.set('n', 'zs', ':w<CR>', { silent = true, desc = 'Save current file' })
 vim.keymap.set('n', 'zq', ':q!<CR>', { silent = true, desc = 'Quit' })
 
-vim.keymap.del('n', '<C-w>d')
-vim.keymap.del('n', '<C-w><C-D>')
+pcall(vim.keymap.del, 'n', '<C-w>d')
+pcall(vim.keymap.del, 'n', '<C-w><C-D>')
 
 local function mark_todo()
   local todo_root = "/home/adam/notes/luzne notatki/temp"
