@@ -63,10 +63,16 @@ sw() {
 	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
 }
 
+sdel() {
+	local name
+	name="$(tmux list-sessions -F '#{session_name} - #{session_windows} windows #{session_path}' | grep -v 'random' | fzf)"
+	[[ -n "$name" ]] && tmux kill-session -t "$(echo "$name" | cut --delimiter=' ' --fields=1 | sed 's/: .*//g')"
+}
+
 snew() {
 	local name
 	name="$(fzf --print-query <~/additional/session_names | tail -n 1)"
-	TMUX='' tmux new-session -d -s "$name"
+	TMUX='' tmux new-session -d -s "$name" -c /home/adam
 	tmux switch-client -t "$name"
 	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
 }
@@ -74,7 +80,7 @@ snew() {
 sdef() {
 	local name
 	name="random-$(tr -dc "A-Za-z1-9" </dev/urandom | head -c 5)"
-	TMUX='' tmux new-session -A -s "$name" -d
+	TMUX='' tmux new-session -A -s "$name" -d -c /home/adam
 	tmux switch-client -t "$name"
 }
 
