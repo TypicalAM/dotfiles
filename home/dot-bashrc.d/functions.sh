@@ -103,3 +103,10 @@ temp-diff() {
 	: >/tmp/second_file
 	nvim /tmp/first_file && nvim /tmp/second_file && kitty +kitten diff /tmp/first_file /tmp/second_file
 }
+
+docker_image_tags() {
+	local input_path
+	input_path="$*"
+	IFS='/' read -r namespace repository <<<"$input_path"
+	curl --silent "https://hub.docker.com/v2/namespaces/$namespace/repositories/$repository/tags?page_size=100" | jq -r '.results[].name'
+}

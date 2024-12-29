@@ -10,6 +10,7 @@ HISTSIZE=10000000
 SAVEHIST=10000000
 
 plugins=(
+	poetry
 	git
 	zsh-autosuggestions
 )
