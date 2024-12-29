@@ -28,3 +28,7 @@ fi
 # Starship prompt init
 # eval "$(starship init zsh)"
 eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_rose_theme.json)"
+
+# Hishtory Config:
+export PATH="$PATH:/home/adam/.hishtory"
+source /home/adam/.hishtory/config.zsh
