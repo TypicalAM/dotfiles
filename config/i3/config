@@ -16,6 +16,9 @@ exec --no-startup-id xinput set-prop $(xinput |awk '$0 ~ /Touchpad/ { for (i=1; 
 # Compositor (enabling transparency)
 exec --no-startup-id picom
 
+# Set up home monitors appropriately
+exec_always --no-startup-id ~/code/scripts/setup_monitors.sh
+
 # Bottom bar
 exec_always bash ~/.config/polybar/launch.sh
 #exec_always sh ~/.config/polybar/polybar-themes/onedark-theme/polybar/launch.sh
