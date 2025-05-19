@@ -155,7 +155,7 @@ bindsym $mod+Shift+e exec --no-startup-id i3-msg exit
 bindsym Print exec --no-startup-id maim -s | xclip -selection clipboard -t image/png
 
 # Make a whole screen screenshot
-bindsym $mod+Print exec --no-startup-id maim "/home/adam/pictures/screenshots/screen-$(date +%s).png" && notify-send "Hello" "Made a whole ass screenshot"
+bindsym $mod+Print exec --no-startup-id maim | xclip -selection clipboard -t image/png && notify-send "Hello" "Made a whole ass screenshot" && xclip -selection clipboard -t image/png -o > "/home/adam/pictures/screenshots/screen-$(date +%s).png"
 
 # Check the hex color of the area under the cursor
 bindsym $mod+Shift+Print exec --no-startup-id bash ~/code/scripts/hex_color_finder.sh
