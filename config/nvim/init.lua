@@ -419,7 +419,7 @@ vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', ';s', function()
+vim.keymap.set('n', ';w', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
@@ -433,7 +433,9 @@ local function telescope_live_grep_open_files()
     prompt_title = 'Live Grep in Open Files',
   }
 end
-vim.keymap.set('n', '<leader>s/', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
+vim.keymap.set('n', ';o', telescope_live_grep_open_files, { desc = '[S]earch [/] in Open Files' })
+vim.keymap.set('n', ';s', require('telescope.builtin').lsp_dynamic_workspace_symbols,
+  { desc = '[s]earch symbols in the workspace' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -529,36 +531,6 @@ local on_attach = function(_, bufnr)
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
-
-  nmap('gn', vim.lsp.buf.rename, 'Rename')
-  nmap('ga', vim.lsp.buf.code_action, 'Code Action')
-
-  nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
-  nmap('<C-[>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
-  nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
-  --nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  --nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  --nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('gs', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
-  nmap('zf', vim.lsp.buf.format, 'Format document with LSP')
-  -- [[  nmap ]]('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  -- See `:help K` for why this keymap
-  nmap('<C-g', vim.lsp.buf.hover, 'Hover Documentation')
-  --nmap('.', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Lesser used LSP functionality
-  nmap('<C-Space>', vim.lsp.buf.declaration, 'Goto Declaration')
-  -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  -- nmap('<leader>wl', function()
-  --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  -- end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
 end
 
 -- document existing key chains
@@ -639,17 +611,67 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
-require('lspconfig').pylsp.setup {
+-- require('lspconfig').pylsp.setup {
+--   settings = {
+--     pylsp = {
+--       plugins = {
+--         pycodestyle = {
+--           maxLineLength = 200
+--         }
+--       }
+--     }
+--   }
+-- }
+
+require('lspconfig').ruff.setup {
   settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          maxLineLength = 200
-        }
-      }
+    ruff = {
+      cmd = { 'ruff', 'server' },
+      filetypes = { 'python' },
+      root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' },
+      settings = {},
     }
   }
 }
+
+
+require('lspconfig').basedpyright.setup({
+  settings = {
+    basedpyright = {
+      disablePullDiagnostics = true,      -- disables server -> client diagnostic push
+      analysis = {
+        diagnosticMode = "openFilesOnly", -- minimum scope (no "off" available)
+        typeCheckingMode = "off",         -- disable type checking
+      },
+    },
+  },
+
+  -- Will need to fix this someday, not now tho
+
+  handlers = {
+    -- Override diagnostic publishing to do nothing
+    ["textDocument/publishDiagnostics"] = function() end,
+  },
+
+  on_attach = function(client)
+    -- Strip all capabilities except document symbols
+    --[[     client.server_capabilities.hoverProvider = false ]]
+    client.server_capabilities.completionProvider = nil
+    --[[     client.server_capabilities.signatureHelpProvider = nil ]]
+    --[[     client.server_capabilities.definitionProvider = false ]]
+    --[[     client.server_capabilities.referencesProvider = false ]]
+    --[[     client.server_capabilities.renameProvider = false ]]
+    -- client.server_capabilities.documentFormattingProvider = false
+    -- client.server_capabilities.documentRangeFormattingProvider = false
+    client.server_capabilities.codeActionProvider = false
+    client.server_capabilities.codeLensProvider = nil
+    --[[     client.server_capabilities.documentHighlightProvider = false ]]
+    --[[     client.server_capabilities.semanticTokensProvider = nil ]]
+    --[[     client.server_capabilities.typeDefinitionProvider = false ]]
+    client.server_capabilities.implementationProvider = false
+    -- Leave only documentSymbolProvider
+  end,
+})
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -733,7 +755,7 @@ end
 
 nmap(';f', require('telescope.builtin').find_files)
 nmap(';d', require('telescope.builtin').jumplist)
-nmap(';w', require('telescope.builtin').current_buffer_fuzzy_find)
+--[[ nmap(';w', require('telescope.builtin').current_buffer_fuzzy_find) ]]
 nmap(';;', require('telescope.builtin').buffers)
 -- [nmap(';s', require('telescope.builtin').lsp_document_symbols)]
 nmap(';r', require('telescope.builtin').lsp_references)
@@ -813,6 +835,35 @@ end
 
 vim.keymap.set('n', '<C-]>', mark_todo, { desc = 'Mark todos' })
 vim.keymap.set('n', '<S-CR>', mark_todo, { desc = 'Mark todos' })
+
+nmap('gn', vim.lsp.buf.rename, 'Rename')
+nmap('ga', vim.lsp.buf.code_action, 'Code Action')
+nmap('<C-CR>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+nmap('<C-[>', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
+--nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+--nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+--nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+nmap('gs', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
+nmap('zf', vim.lsp.buf.format, 'Format document with LSP')
+-- [[  nmap ]]('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+-- See `:help K` for why this keymap
+nmap('<C-g', vim.lsp.buf.hover, 'Hover Documentation')
+--nmap('.', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+-- Lesser used LSP functionality
+nmap('<C-Space>', vim.lsp.buf.declaration, 'Goto Declaration')
+-- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+-- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+-- nmap('<leader>wl', function()
+--   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+-- end, '[W]orkspace [L]ist Folders')
+
+-- Create a command `:Format` local to the LSP buffer
+vim.api.nvim_create_user_command('Format', function(_)
+  vim.lsp.buf.format()
+end, { desc = 'Format current buffer with LSP' })
 
 local hipatterns = require('mini.hipatterns')
 hipatterns.setup({
