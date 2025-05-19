@@ -29,6 +29,7 @@ require('lazy').setup({
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+  'echasnovski/mini.hipatterns',
 
   {
     'akinsho/bufferline.nvim',
@@ -417,15 +418,14 @@ end
 vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
+vim.keymap.set('n', ';s', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer' })
+end, { desc = '[s] Fuzzily search in current buffer' })
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
@@ -723,14 +723,71 @@ require('telescope').setup {
   }
 }
 
-vim.keymap.set('n', ';f', '<Cmd>Telescope find_files<CR>')
-vim.keymap.set('n', ';d', '<Cmd>Telescope jumplist<CR>')
-vim.keymap.set('n', ';w', '<Cmd>Telescope current_buffer_fuzzy_find<CR>')
-vim.keymap.set('n', ';;', '<Cmd>Telescope buffers<CR>')
-vim.keymap.set('n', ';s', '<Cmd>Telescope lsp_document_symbols<CR>')
-vim.keymap.set('n', ';r', '<Cmd>Telescope lsp_references<CR>')
-vim.keymap.set('n', ';c', '<Cmd>Telescope commands<CR>')
-vim.keymap.set('n', ';g', '<Cmd>Telescope live_grep<CR>')
+local nmap = function(keys, func, desc)
+  if desc then
+    desc = 'LSP: ' .. desc
+  end
+
+  vim.keymap.set('n', keys, func, {})
+end
+
+nmap(';f', require('telescope.builtin').find_files)
+nmap(';d', require('telescope.builtin').jumplist)
+nmap(';w', require('telescope.builtin').current_buffer_fuzzy_find)
+nmap(';;', require('telescope.builtin').buffers)
+-- [nmap(';s', require('telescope.builtin').lsp_document_symbols)]
+nmap(';r', require('telescope.builtin').lsp_references)
+nmap(';c', require('telescope.builtin').commands)
+--[[ nmap(';g', require('telescope.builtin').live_grep) ]]
+nmap(';r', require('telescope.builtin').oldfiles)
+
+local pickers = require "telescope.pickers"
+local finders = require "telescope.finders"
+local make_entry = require "telescope.make_entry"
+local conf = require "telescope.config".values
+
+local live_multigrep = function(opts)
+  opts = opts or {}
+  opts.cwd = opts.cwd or vim.uv.cwd()
+
+  local finder = finders.new_async_job {
+    command_generator = function(prompt)
+      if not prompt or prompt == "" then
+        return nil
+      end
+
+      local pieces = vim.split(prompt, "  ")
+      local args = { "rg" }
+      if pieces[1] then
+        table.insert(args, "-e")
+        table.insert(args, pieces[1])
+      end
+
+      if pieces[2] then
+        table.insert(args, "-g")
+        table.insert(args, pieces[2])
+      end
+
+      ---@diagnostic disable-next-line: deprecated
+      return vim.tbl_flatten {
+        args,
+        { "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" },
+      }
+    end,
+    entry_maker = make_entry.gen_from_vimgrep(opts),
+    cwd = opts.cwd,
+  }
+
+  pickers.new(opts, {
+    debounce = 100,
+    prompt_title = "Multi Grep",
+    finder = finder,
+    previewer = conf.grep_previewer(opts),
+    sorter = require("telescope.sorters").empty(),
+  }):find()
+end
+
+nmap(';g', live_multigrep)
 
 vim.keymap.set('n', '<C-a>', 'ggVG', { silent = true, desc = 'Select everything' })
 vim.keymap.set('n', '<C-w>', ':bw<CR>', { silent = true, desc = 'Close tab' })
@@ -756,6 +813,30 @@ end
 
 vim.keymap.set('n', '<C-]>', mark_todo, { desc = 'Mark todos' })
 vim.keymap.set('n', '<S-CR>', mark_todo, { desc = 'Mark todos' })
+
+local hipatterns = require('mini.hipatterns')
+hipatterns.setup({
+  highlighters = {
+    -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
+    fixme     = { pattern = '%f[%w]()FIXME()%f[%W]', group = 'MiniHipatternsFixme' },
+    hack      = { pattern = '%f[%w]()HACK()%f[%W]', group = 'MiniHipatternsHack' },
+    todo      = { pattern = '%f[%w]()TODO()%f[%W]', group = 'MiniHipatternsTodo' },
+    note      = { pattern = '%f[%w]()NOTE()%f[%W]', group = 'MiniHipatternsNote' },
+    test      = {
+      pattern = '%f[%w]()%a+()%f[%W]',
+      group = function(_, match, _)
+        local word = match:lower()
+        if word == 'dupa' or word == 'kurwa' or word == 'chuj' then
+          return 'MiniHipatternsFixme'
+        end
+        return nil
+      end,
+    },
+
+    -- Highlight hex color strings (`#rrggbb`) using that color
+    hex_color = hipatterns.gen_highlighter.hex_color(),
+  },
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
