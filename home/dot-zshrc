@@ -15,6 +15,7 @@ plugins=(
 	zsh-autosuggestions
 )
 
+zstyle ':omz:update' mode disabled
 source $ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $ZSH/oh-my-zsh.sh
 autoload zmv
@@ -26,10 +27,5 @@ if [ -d ~/.bashrc.d ]; then
 	done
 fi
 
-# Starship prompt init
-# eval "$(starship init zsh)"
+# Oh my posh prompt
 eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_rose_theme.json)"
-
-# Hishtory Config:
-export PATH="$PATH:/home/adam/.hishtory"
-source /home/adam/.hishtory/config.zsh
