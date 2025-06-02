@@ -13,7 +13,6 @@ hello() {
 		echo "$date" >~/temp/date
 	fi
 }
-hello
 
 venv_new() {
 	python3 -m venv venv
