@@ -51,3 +51,4 @@ alias disks='fdisk -l |s dev'
 alias check_keys="xev -event keyboard  | egrep -o 'keycode.*\)'"
 alias dc='docker compose'
 alias todo='nvim "$HOME/notes/luzne notatki/todo.md"'
+alias virsh='virsh --connect=qemu:///system'
