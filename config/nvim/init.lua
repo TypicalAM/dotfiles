@@ -225,18 +225,14 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- TODO
   {
-    'startup-nvim/startup.nvim',
-    dependencies = {
-      'nvim-telescope/telescope.nvim',
-      'nvim-lua/plenary.nvim',
-    },
+    "goolord/alpha-nvim",
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require('startup').setup(require('kickstart.plugins.startify'))
+      require 'kickstart.plugins.alpha'
     end,
   },
-}, {})
+})
 
 require 'kickstart.options' -- Options
 require 'kickstart.keymaps' -- Keymaps
