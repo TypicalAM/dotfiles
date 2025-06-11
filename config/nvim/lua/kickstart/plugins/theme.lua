@@ -1,7 +1,7 @@
 local theme = 'rosepine'
 
 if theme == 'rosepine' then
-   return {
+  return {
     'rose-pine/neovim',
     priority = 1000,
     config = function()
@@ -9,7 +9,7 @@ if theme == 'rosepine' then
     end,
   }
 else
-   return {
+  return {
     'catppuccin/nvim',
     priority = 1000,
     config = function()

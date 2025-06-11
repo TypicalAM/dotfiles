@@ -65,24 +65,28 @@ require('lazy').setup({
   },
 
   {
-    "olexsmir/gopher.nvim",
-    ft = "go",
+    'olexsmir/gopher.nvim',
+    ft = 'go',
     -- branch = "develop", -- if you want develop branch
     -- keep in mind, it might break everything
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
     },
     opts = {},
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', dependencies = {
-    "nvim-tree/nvim-web-devicons",
-    "echasnovski/mini.icons"
-  }, opts = {  icons = {
-    mappings = false,
-  },} },
+  {
+    'folke/which-key.nvim',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      'echasnovski/mini.icons',
+    },
+    opts = { icons = {
+      mappings = false,
+    } },
+  },
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -117,19 +121,19 @@ require('lazy').setup({
     opts = {
       defaults = {
         file_ignore_patterns = {
-          "__pycache__",
-          "staticfiles",
-          "media",
-          "migrations",
-          "venv",
-          ".git"
-        }
+          '__pycache__',
+          'staticfiles',
+          'media',
+          'migrations',
+          'venv',
+          '.git',
+        },
       },
       pickers = {
         find_files = {
-          follow = true
-        }
-      }
+          follow = true,
+        },
+      },
     },
   },
 
@@ -147,16 +151,14 @@ require('lazy').setup({
     'startup-nvim/startup.nvim',
     dependencies = {
       'nvim-telescope/telescope.nvim',
-      'nvim-lua/plenary.nvim'
+      'nvim-lua/plenary.nvim',
     },
     config = function()
       vim.g.startup_bookmarks = {
-        ["t"] = '~/notes/luzne notatki/todo',
+        ['t'] = '~/notes/luzne notatki/todo',
       }
-      require("startup").setup(
-        { theme = "startify" }
-      )
-    end
+      require('startup').setup { theme = 'startify' }
+    end,
   },
 }, {})
 

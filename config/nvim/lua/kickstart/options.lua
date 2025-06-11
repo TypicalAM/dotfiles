@@ -6,11 +6,10 @@ vim.o.mouse = 'a' -- Enable mouse mode
 vim.o.clipboard = 'unnamedplus' -- Sync clipboard between OS and Neovim.
 vim.o.breakindent = true -- Enable break indent
 vim.o.undofile = true -- Save undo history
-vim.o.ignorecase = true -- Case-insensitive searching 
+vim.o.ignorecase = true -- Case-insensitive searching
 vim.o.smartcase = true -- UNLESS capital in search
 vim.wo.signcolumn = 'yes' -- Keep signcolumn on by default
 vim.o.updatetime = 250 -- Decrease update time
 vim.o.timeoutlen = 300
 vim.o.completeopt = 'menuone,noselect' -- Better completion experience
 vim.o.termguicolors = true -- NOTE: You should make sure your terminal supports this
-

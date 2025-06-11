@@ -39,8 +39,8 @@ local servers = {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-local mason_lspconfig = require('mason-lspconfig')
-local lspconfig = require('lspconfig')
+local mason_lspconfig = require 'mason-lspconfig'
+local lspconfig = require 'lspconfig'
 mason_lspconfig.setup_handlers {
   function(server_name)
     lspconfig[server_name].setup {
@@ -57,11 +57,11 @@ lspconfig.pylsp.setup {
     pylsp = {
       plugins = {
         pycodestyle = {
-          maxLineLength = 200
-        }
-      }
-    }
-  }
+          maxLineLength = 200,
+        },
+      },
+    },
+  },
 }
 
 lspconfig.ruff.setup {
@@ -71,17 +71,17 @@ lspconfig.ruff.setup {
       filetypes = { 'python' },
       root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' },
       settings = {},
-    }
-  }
+    },
+  },
 }
 
-lspconfig.basedpyright.setup({
+lspconfig.basedpyright.setup {
   settings = {
     basedpyright = {
-      disablePullDiagnostics = true,      -- disables server -> client diagnostic push
+      disablePullDiagnostics = true, -- disables server -> client diagnostic push
       analysis = {
-        diagnosticMode = "openFilesOnly", -- minimum scope (no "off" available)
-        typeCheckingMode = "off",         -- disable type checking
+        diagnosticMode = 'openFilesOnly', -- minimum scope (no "off" available)
+        typeCheckingMode = 'off', -- disable type checking
       },
     },
   },
@@ -90,7 +90,7 @@ lspconfig.basedpyright.setup({
 
   handlers = {
     -- Override diagnostic publishing to do nothing
-    ["textDocument/publishDiagnostics"] = function() end,
+    ['textDocument/publishDiagnostics'] = function() end,
   },
 
   on_attach = function(client)
@@ -111,7 +111,7 @@ lspconfig.basedpyright.setup({
     client.server_capabilities.implementationProvider = false
     -- Leave only documentSymbolProvider
   end,
-})
+}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
