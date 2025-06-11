@@ -1,0 +1,9 @@
+- [x] Staging git files and doing commits
+- [x] Startify working
+- [x] Which-key bugs out for some reason
+- [x] LSP on nix and also on fedora
+- [x] Working integration with the git thingy
+- [x] We cant find fiels with git in the name xD, maybe the telescope default filter is actually a regex?
+- [-] Maybe a todo system in a central location? idk
+- [ ] Dont fucking highlighjt  everythging
+- [x] Searching in keymaps
