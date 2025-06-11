@@ -206,7 +206,6 @@ require('lazy').setup({
           'media',
           'migrations',
           'venv',
-          '.git',
         },
       },
       pickers = {
