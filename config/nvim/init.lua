@@ -77,7 +77,12 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    "echasnovski/mini.icons"
+  }, opts = {  icons = {
+    mappings = false,
+  },} },
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
