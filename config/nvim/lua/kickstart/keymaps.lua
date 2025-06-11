@@ -41,14 +41,14 @@ local live_multigrep = function(opts)
   }
 
   pickers
-    .new(opts, {
-      debounce = 100,
-      prompt_title = 'Multi Grep',
-      finder = finder,
-      previewer = conf.grep_previewer(opts),
-      sorter = require('telescope.sorters').empty(),
-    })
-    :find()
+      .new(opts, {
+        debounce = 100,
+        prompt_title = 'Multi Grep',
+        finder = finder,
+        previewer = conf.grep_previewer(opts),
+        sorter = require('telescope.sorters').empty(),
+      })
+      :find()
 end
 
 local function mark_todo()
@@ -122,14 +122,14 @@ local wk = require 'which-key'
 
 wk.add {
   -- Group declaration
-  { '<leader>c', group = '[C]ode' },
-  { '<leader>d', group = '[D]ocument' },
-  { '<leader>g', group = '[G]it' },
-  { '<leader>h', group = 'Git [H]unk' },
-  { '<leader>r', group = '[R]ename' },
-  { '<leader>s', group = '[S]earch' },
-  { '<leader>t', group = '[T]oggle' },
-  { '<leader>w', group = '[W]orkspace' },
+  { '<leader>c',  group = '[C]ode' },
+  { '<leader>d',  group = '[D]ocument' },
+  { '<leader>g',  group = '[G]it' },
+  { '<leader>h',  group = 'Git [H]unk' },
+  { '<leader>r',  group = '[R]ename' },
+  { '<leader>s',  group = '[S]earch' },
+  { '<leader>t',  group = '[T]oggle' },
+  { '<leader>w',  group = '[W]orkspace' },
 
   -- Optional hidden keys (e.g., group prefixes or catch-alls)
   { '<leader>c_', hidden = true },
