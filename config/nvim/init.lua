@@ -239,10 +239,7 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
     },
     config = function()
-      vim.g.startup_bookmarks = {
-        ['t'] = '~/notes/luzne notatki/todo',
-      }
-      require('startup').setup { theme = 'startify' }
+      require('startup').setup(require('kickstart.plugins.startify'))
     end,
   },
 }, {})
