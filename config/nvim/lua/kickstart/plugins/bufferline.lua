@@ -8,7 +8,4 @@ return {
       separator_style = 'thin',
     },
   },
-  config = function()
-    require("bufferline").setup({})
-  end
 }
