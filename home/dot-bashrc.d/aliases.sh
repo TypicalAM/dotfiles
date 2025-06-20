@@ -52,4 +52,4 @@ alias check_keys="xev -event keyboard  | egrep -o 'keycode.*\)'"
 alias dc='docker compose'
 alias todo='nvim "$HOME/notes/luzne notatki/todo.md"'
 alias virsh='virsh --connect=qemu:///system'
-alias dev='kitty +kitten ssh nix-dev -t /mnt/share/dotfiles/scripts/start-tmux.sh'
+alias dev='kitty +kitten ssh nix-dev -t /mnt/share/additional/dotfiles/scripts/start-tmux.sh'
