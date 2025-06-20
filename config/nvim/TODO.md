@@ -5,5 +5,6 @@
 - [x] Working integration with the git thingy
 - [x] We cant find fiels with git in the name xD, maybe the telescope default filter is actually a regex?
 - [-] Maybe a todo system in a central location? idk
-- [ ] Dont fucking highlighjt  everythging
+- [x] Dont fucking highlighjt  everythging
+- [ ] Folds
 - [x] Searching in keymaps
