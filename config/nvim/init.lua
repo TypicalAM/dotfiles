@@ -232,6 +232,28 @@ require('lazy').setup({
       require 'kickstart.plugins.alpha'
     end,
   },
+  {
+    "voldikss/vim-floaterm",
+    config = function()
+      vim.api.nvim_create_user_command('FancyRanger', function()
+        local cwd = vim.fn.getcwd()
+        vim.cmd('FloatermNew --height=0.8 --width=0.6 --wintype=float --position=center --autoclose=2 ranger "' ..
+          cwd .. '"')
+      end, { desc = "Fancy floating file manager" })
+
+      vim.api.nvim_create_user_command('FancyGitPush', function()
+        vim.cmd('FloatermNew --height=0.6 --width=0.6 --wintype=float --position=center --autoclose=0 git push')
+      end, { desc = "Fancy git push" })
+
+      vim.api.nvim_create_user_command('FancyGitStatus', function()
+        vim.cmd('FloatermNew --height=0.6 --width=0.6 --wintype=float --position=center --autoclose=0 git status')
+      end, { desc = "Fancy git status" })
+
+      vim.api.nvim_create_user_command('LazyGit', function()
+        vim.cmd('FloatermNew --height=0.9 --width=0.9 --wintype=float --position=center --autoclose=2 lazygit')
+      end, { desc = "Fancy lazygit" })
+    end
+  }
 })
 
 require 'kickstart.options' -- Options

@@ -115,11 +115,12 @@ nmap('M', ':set number!<CR>', 'Toggle line numbers')
 nmap('zs', ':w<CR>', 'Save current file')
 nmap('zq', ':q!<CR>', 'Quit')
 nmap('<Space>', '<Nop>', 'Silent space')
-nmap('gs', ':Git status<CR>', 'Git status')
-nmap('<leader>gs', ':Git status<CR>', 'Git status')
+nmap('gs', ':FancyGitStatus<CR>', 'Git status')
+nmap('<leader>gs', ':FancyGitStatus<CR>', 'Git status')
 nmap('<leader>gc', ':Git commit<CR>', 'Git commit')
-nmap('gp', ':Git push<CR>', 'Git push')
-nmap('<leader>gp', ':Git push<CR>', 'Git push')
+nmap('gp', ':FancyGitPush<CR>', 'Git push')
+nmap('<leader>r', ':FancyRanger<CR>', 'Ranger')
+nmap('go', ':LazyGit<CR>', 'LazyGit')
 
 -- document existing key chains
 local wk = require 'which-key'
