@@ -2,4 +2,4 @@
 - [ ] GPU mode showoff
 - [ ] Hibernation test
 - [ ] Wi-Fi not working
-- [ ] Rofi should not fade
+- [x] Rofi should not fade
