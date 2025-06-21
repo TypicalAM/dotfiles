@@ -1,5 +1,6 @@
 - [x] mod + tab
-- [ ] GPU mode showoff
-- [ ] Hibernation test
+- [x] GPU mode showoff
+- [x] Hibernation test + lockscreen
 - [x] Wi-Fi not working
 - [x] Rofi should not fade
+- [ ] Screencasting
