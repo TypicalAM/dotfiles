@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 
-# Get the volume of the microphone
-output=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+get_mic_status() {
+  output=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+  if [[ "$output" == *"[MUTED]" ]]; then
+    echo " Muted"
+  else
+    echo " $(echo "$output" | cut -c 11-)%"
+  fi
+}
 
-# Check if we are muted or unmuted
-if [[ "$output" == *"[MUTED]" ]]; then
-	# The microphone is muted
-  echo " Muted"
-else 
-	# The microphone is not muted, drop the first 11 characters
-	# Because we only want the value, not the "Volume: 0." prefix
-	echo " $(echo $output|cut -c 11-)%"
-fi 
+if [[ "$1" == "loop" ]]; then
+  prev=""
+  while true; do
+    current=$(get_mic_status)
+    if [[ "$current" != "$prev" ]]; then
+      echo "$current"
+      prev="$current"
+    fi
+    sleep 0.2
+  done
+else
+  get_mic_status
+fi
