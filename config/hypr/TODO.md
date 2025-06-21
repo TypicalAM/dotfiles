@@ -1,4 +1,4 @@
-- [ ] mod + tab
+- [x] mod + tab
 - [ ] GPU mode showoff
 - [ ] Hibernation test
 - [x] Wi-Fi not working
