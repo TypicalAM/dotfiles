@@ -1,5 +1,5 @@
 - [ ] mod + tab
 - [ ] GPU mode showoff
 - [ ] Hibernation test
-- [ ] Wi-Fi not working
+- [x] Wi-Fi not working
 - [x] Rofi should not fade
