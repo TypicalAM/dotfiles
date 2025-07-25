@@ -18,6 +18,7 @@ application/x-extension-xhtml=zen-browser.desktop
 application/x-extension-xht=zen-browser.desktop
 inode/directory=thunar.desktop
 application/x-wayland-gnome-saved-search=thunar.desktop
+x-scheme-handler/everest=/home/adam/.local/share/applications/Olympus.desktop
 
 [Added Associations]
 x-scheme-handler/http=applications-zen_browser.desktop;zen-browser.desktop;
