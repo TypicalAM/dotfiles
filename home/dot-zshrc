@@ -28,4 +28,4 @@ if [ -d ~/.bashrc.d ]; then
 fi
 
 # Oh my posh prompt
-eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_rose_theme.json)"
+eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/catppuccin_macchiato.omp.json)"
