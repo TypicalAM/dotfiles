@@ -41,27 +41,9 @@ return {
       end, { expr = true, desc = 'Jump to previous hunk' })
 
       -- Actions
-      -- visual mode
-      map('v', '<leader>hs', function()
-        gs.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-      end, { desc = 'stage git hunk' })
-      map('v', '<leader>hr', function()
-        gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-      end, { desc = 'reset git hunk' })
-      -- normal mode
-      map('n', 'ga', gs.stage_hunk, { desc = 'Git stage hunk' })
-      map('n', '<leader>ga', gs.stage_hunk, { desc = 'Git stage hunk' })
-      map('n', '<leader>gr', gs.reset_hunk, { desc = 'Git reset hunk' })
-      map('n', '<leader>gfs', gs.stage_buffer, { desc = 'Git stage file' })
-      map('n', '<leader>gu', gs.undo_stage_hunk, { desc = 'Undo stage hunk' })
-      map('n', '<leader>gfr', gs.reset_buffer, { desc = 'Git Reset buffer' })
-      map('n', '<leader>gs', gs.preview_hunk, { desc = 'Preview git hunk' })
-      map('n', '<leader>gb', function()
+      map('n', 'gb', function()
         gs.blame_line { full = false }
       end, { desc = 'git blame line' })
-      map('n', '<leader>gd', function()
-        gs.diffthis '~'
-      end, { desc = 'git diff against last commit' })
 
       -- Toggles
       map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'toggle git blame line' })

@@ -104,6 +104,7 @@ nmap('[e', vim.diagnostic.goto_prev, 'Go to previous diagnostic message')
 nmap(']e', vim.diagnostic.goto_next, 'Go to next diagnostic message')
 nmap('<leader>e', vim.diagnostic.open_float, 'Open floating diagnostic message')
 nmap('.', vim.lsp.buf.signature_help, 'Signature Documentation')
+nmap('ga', vim.lsp.buf.code_action, 'Signature Documentation')
 
 -- Misc
 nmap('<C-]>', mark_todo, 'Mark todos')
