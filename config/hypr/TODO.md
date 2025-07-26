@@ -4,7 +4,7 @@
 - [x] Wi-Fi not working
 - [x] Rofi should not fade
 - [x] Screencasting
+- [x] Gist pasting/copying
+- [x] 180* screen flip
 - [ ] Turning off the screen in wayland if at 0% brightness
 - [ ] "Holding" keypresses in wayland
-- [x] Gist pasting/copying
-- [ ] 180* screen flip
