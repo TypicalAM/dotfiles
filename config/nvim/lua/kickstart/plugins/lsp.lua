@@ -147,3 +147,11 @@ vim.notify = function(msg, ...)
 
   notify(msg, ...)
 end
+
+-- Make nvim shut up about the buf_highlight_references race condition
+local orig_handler = vim.lsp.handlers["textDocument/documentHighlight"]
+vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
+  local bufnr = ctx.bufnr
+  if not vim.api.nvim_buf_is_valid(bufnr) then return end
+  return orig_handler(err, result, ctx, config)
+end
