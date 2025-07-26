@@ -6,5 +6,5 @@
 - [x] Screencasting
 - [x] Gist pasting/copying
 - [x] 180* screen flip
+- [x] "Holding" keypresses in wayland
 - [ ] Turning off the screen in wayland if at 0% brightness
-- [ ] "Holding" keypresses in wayland
