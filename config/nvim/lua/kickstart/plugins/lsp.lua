@@ -29,10 +29,10 @@ lspconfig.ruff.setup {
 lspconfig.basedpyright.setup {
   settings = {
     basedpyright = {
-      disablePullDiagnostics = true, -- disables server -> client diagnostic push
+      disablePullDiagnostics = true,      -- disables server -> client diagnostic push
       analysis = {
         diagnosticMode = 'openFilesOnly', -- minimum scope (no "off" available)
-        typeCheckingMode = 'off', -- disable type checking
+        typeCheckingMode = 'off',         -- disable type checking
       },
     },
   },
@@ -137,3 +137,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.api.nvim_create_user_command('Format', function(_)
   vim.lsp.buf.format()
 end, { desc = 'Format current buffer with LSP' })
+
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/issues/428
+local notify = vim.notify
+vim.notify = function(msg, ...)
+  if msg:match("warning: multiple different client offset_encodings") then
+    return
+  end
+
+  notify(msg, ...)
+end
