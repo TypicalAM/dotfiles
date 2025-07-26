@@ -3,4 +3,8 @@
 - [x] Hibernation test + lockscreen
 - [x] Wi-Fi not working
 - [x] Rofi should not fade
-- [ ] Screencasting
+- [x] Screencasting
+- [ ] Turning off the screen in wayland if at 0% brightness
+- [ ] "Holding" keypresses in wayland
+- [ ] Gist pasting/copying
+- [ ] 180* screen flip
