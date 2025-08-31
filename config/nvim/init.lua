@@ -204,7 +204,6 @@ require('lazy').setup({
           '__pycache__',
           'staticfiles',
           'media',
-          'migrations',
           'venv',
         },
       },
