@@ -105,6 +105,7 @@ nmap(']e', vim.diagnostic.goto_next, 'Go to next diagnostic message')
 nmap('<leader>e', vim.diagnostic.open_float, 'Open floating diagnostic message')
 nmap('.', vim.lsp.buf.signature_help, 'Signature Documentation')
 nmap('ga', vim.lsp.buf.code_action, 'Signature Documentation')
+vim.keymap.set('v', 'zf', vim.lsp.buf.format, { desc = "Format selected lines" })
 
 -- Misc
 nmap('<C-]>', mark_todo, 'Mark todos')
