@@ -1,18 +1,6 @@
 require('mason').setup()
 
 local lspconfig = require 'lspconfig'
-lspconfig.pylsp.setup {
-  settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          maxLineLength = 200,
-        },
-      },
-    },
-  },
-}
-
 lspconfig.nil_ls.setup {}
 
 lspconfig.ruff.setup {
@@ -46,6 +34,8 @@ lspconfig.basedpyright.setup {
 
   on_attach = function(client)
     -- Strip all capabilities except document symbols
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
     --[[     client.server_capabilities.hoverProvider = false ]]
     client.server_capabilities.completionProvider = nil
     --[[     client.server_capabilities.signatureHelpProvider = nil ]]
