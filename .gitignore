@@ -50,3 +50,5 @@ coverage.xml
 docs/_build/
 
 scripts/check_services.sh
+home/dot-tmux/plugins/*
+!home/dot-tmux/plugins/tpm
