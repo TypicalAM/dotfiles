@@ -1,4 +1,4 @@
-local theme = 'catpuccin'
+local theme = 'rosepine'
 
 if theme == 'rosepine' then
   return {
