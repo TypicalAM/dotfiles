@@ -1,0 +1,4 @@
+- [ ] Spawning new windows regardless of the wezterm state (do not spawn windows in the defualt workspace)
+- [ ] Closing the last window of the workspace should close the program
+- [ ] Random ephemeral sessions
+- [ ] Better statusline

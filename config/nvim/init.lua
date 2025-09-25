@@ -45,6 +45,24 @@ require('lazy').setup({
     },
   },
 
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    dependencies = {
+      {
+        'DrKJeff16/wezterm-types',
+        lazy = true,
+        version = false, -- Get the latest version
+      },
+    },
+    opts = {
+      library = {
+        -- Other library configs...
+        { path = 'wezterm-types', mods = { 'wezterm' } },
+      },
+    },
+  },
+
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -76,7 +94,6 @@ require('lazy').setup({
         },
         opts = {},
       },
-      'folke/lazydev.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config

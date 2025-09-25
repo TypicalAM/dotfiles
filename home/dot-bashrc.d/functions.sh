@@ -57,9 +57,23 @@ pcd() {
 	fi
 }
 
+# https://github.com/wezterm/wezterm/issues/3542
+__wezterm-switch-workspace() {
+	args=$(jq -n --arg workspace "$1" --arg cwd "/home/adam" '{"workspace":$workspace,"cwd":$cwd}' | base64)
+	printf "\033]1337;SetUserVar=%s=%s\007" switch-workspace $args
+}
+
 sw() {
-	tmux switch-client -t "$(tmux list-sessions -F '#{session_name} - #{session_windows} windows #{session_path}' | grep -v 'random' | fzf | cut --delimiter=' ' --fields=1 | sed 's/: .*//g')"
-	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
+	if [[ -z "${TMUX}" ]]; then
+		local selected
+		selected="$(wezterm cli list --format=table | awk 'NR>1 {print $4}' | sort -u | fzf)"
+		if [[ -n "$selected" ]]; then
+			__wezterm-switch-workspace "$selected"
+		fi
+	else
+		tmux switch-client -t "$(tmux list-sessions -F '#{session_name} - #{session_windows} windows #{session_path}' | grep -v 'random' | fzf | cut --delimiter=' ' --fields=1 | sed 's/: .*//g')"
+		tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
+	fi
 }
 
 sdel() {
@@ -71,9 +85,14 @@ sdel() {
 snew() {
 	local name
 	name="$(fzf --print-query <~/additional/session_names | tail -n 1)"
-	TMUX='' tmux new-session -d -s "$name" -c /home/adam
-	tmux switch-client -t "$name"
-	tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
+
+	if [[ -z "${TMUX}" ]]; then
+		__wezterm-switch-workspace "$name"
+	else
+		TMUX='' tmux new-session -d -s "$name" -c /home/adam
+		tmux switch-client -t "$name"
+		tmux list-sessions -F '#{session_attached} #{session_name}' | grep "^0 random" | cut --delimiter=' ' --fields=2 | xargs -I {} -- tmux kill-session -t {}
+	fi
 }
 
 sdef() {
