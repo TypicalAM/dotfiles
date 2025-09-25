@@ -2,3 +2,5 @@
 - [ ] Closing the last window of the workspace should close the program
 - [ ] Random ephemeral sessions
 - [ ] Better statusline
+- [ ] Searching through visible contents
+- [ ] Start new tabs from ~, not the current one
