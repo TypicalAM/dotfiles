@@ -129,6 +129,7 @@ docker_image_tags() {
 	curl --silent "https://hub.docker.com/v2/namespaces/$namespace/repositories/$repository/tags?page_size=100" | jq -r '.results[].name'
 }
 
-col() {
-	awk -v col="$1" '{print $col}' "${@:2}"
-}
+# Deprecated: trying out choose
+# col() {
+# 	awk -v col="$1" '{print $col}' "${@:2}"
+# }
