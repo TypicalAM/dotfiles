@@ -13,6 +13,16 @@ wezterm.on('update-right-status', function(window, _)
 end)
 
 wezterm.on('user-var-changed', function(window, pane, name, value)
+	if name == 'is-distrobox' then
+		local cmd_context = wezterm.json_parse(value)
+		if cmd_context.container ~= "none" then
+			local whale = "🐳"
+			if string.sub(window:active_tab():get_title(), 1, string.len(whale)) ~= whale then
+				window:active_tab():set_title("🐳" .. window:active_tab():get_title())
+			end
+		end
+	end
+
 	if name == 'switch-workspace' then
 		local cmd_context = wezterm.json_parse(value)
 		window:perform_action(
@@ -87,7 +97,22 @@ config.keys = {
 	{ key = "6",          mods = "ALT",        action = wezterm.action.ActivateTab(5) },
 
 	-- Ctrl+T: open new tab
-	{ key = "t",          mods = "CTRL",       action = wezterm.action.SpawnTab("DefaultDomain") },
+	{
+		key = "t",
+		mods = "CTRL",
+		action = wezterm.action_callback(function(win, pane)
+			local cmd_context = wezterm.json_parse(pane:get_user_vars()["is-distrobox"])
+			if cmd_context.container ~= "none" then
+				win:perform_action(
+					wezterm.action { SpawnCommandInNewTab = {
+						args = { "distrobox", "enter", cmd_context.container }
+					} }, pane)
+			else
+				win:perform_action(wezterm.action { SpawnTab = "DefaultDomain" }, pane)
+			end
+		end
+		)
+	},
 	{
 		key = "s",
 		mods = "CTRL",

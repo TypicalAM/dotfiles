@@ -1,0 +1,86 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+    "teal": "#4fb3a4",
+    "mint": "#9fffc7",
+    "light_cyan": "#a3e4f1",
+    "dark_gray": "#5e6472",
+    "orange": "#ffb86c",
+    "crimson": "#ff5f6d",
+    "white": "#e8e8f0",
+    "yellow_green": "#d7f75b"
+  },
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none",
+            "folder_separator_icon": "/",
+            "mapped_locations": {
+              "~": ""
+            },
+            "style": "full"
+          },
+          "template": "{{ .Path }} ",
+          "foreground": "p:mint",
+          "type": "path",
+          "style": "plain"
+        },
+        {
+          "properties": {
+            "branch_icon": "git:",
+            "cache_duration": "none",
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          },
+          "template": "{{ .HEAD }}{{ if .Staging.Changed }} {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} {{ .Working.String }}{{ end }}",
+          "foreground": "p:dark_gray",
+          "type": "git",
+          "style": "plain",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}p:orange{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:crimson{{ end }}",
+            "{{ if gt .Ahead 0 }}p:crimson{{ end }}",
+            "{{ if gt .Behind 0 }}p:crimson{{ end }}"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": "\uf105",
+          "foreground": "p:light_cyan",
+          "type": "text",
+          "style": "plain"
+        }
+      ],
+      "newline": true
+    },
+    {
+      "type": "rprompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": " 🐳 {{ .UserName }}@{{ .HostName }} ",
+          "foreground": "p:dark_gray",
+          "type": "session",
+          "style": "plain"
+        }
+      ]
+    }
+  ],
+  "version": 3,
+  "final_space": true
+}

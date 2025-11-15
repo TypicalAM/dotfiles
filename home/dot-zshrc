@@ -27,5 +27,28 @@ if [ -d ~/.bashrc.d ]; then
 	done
 fi
 
-# Oh my posh prompt
-eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_rose_theme.json)"
+__wezterm-set-distrobox() {
+	args=$(jq -n --arg container "$1" '{"container":$container}' | base64)
+	printf "\033]1337;SetUserVar=%s=%s\007" "is-distrobox" $args
+}
+#
+if [ -f /run/.toolboxenv -o -f /run/.containerenv ]; then
+    local name
+    export IS_CONTAINER=1
+    name=$(grep '^name=' /run/.containerenv | cut -d= -f2 | tr -d '"')
+    __wezterm-set-distrobox "$name"
+    eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_container_theme.json)"
+else
+    export IS_CONTAINER=0
+    __wezterm-set-distrobox "none"
+    eval "$(oh-my-posh init zsh --config ~/.config/ohmyposh/my_custom_rose_theme.json)"
+fi
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.local/bin/env"
