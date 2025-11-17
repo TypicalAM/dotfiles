@@ -103,17 +103,33 @@ sdef() {
 }
 
 ncd() {
-	local choice
-	if choice="$(find -- ~/notes/* -type d | fzf)"; then
-		cd "$choice" || return
-	fi
+    local choice
+    if choice="$(find ~/notes -type d \
+        -not -path '*/.venv*' \
+        -not -path '*/venv*' \
+        -not -path '*/node_modules*' \
+        -not -path '*/.git*' \
+        -not -path '*/.gradle*' \
+        -not -path '*/.idea*' \
+        -not -path '*/build*' \
+        | fzf)"; then
+        cd "$choice" || return
+    fi
 }
 
 ccd() {
-	local choice
-	if choice="$(find -- ~/code/* -type d | fzf)"; then
-		cd "$choice" || return
-	fi
+    local choice
+    if choice="$(find ~/code -type d \
+        -not -path '*/.venv*' \
+        -not -path '*/venv*' \
+        -not -path '*/node_modules*' \
+        -not -path '*/.git*' \
+        -not -path '*/.gradle*' \
+        -not -path '*/.idea*' \
+        -not -path '*/build*' \
+        | fzf)"; then
+        cd "$choice" || return
+    fi
 }
 
 temp-diff() {
