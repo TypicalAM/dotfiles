@@ -52,7 +52,7 @@ alias dc='docker compose'
 alias todo='nvim "$HOME/notes/luzne notatki/todo.md"'
 alias virsh='virsh --connect=qemu:///system'
 alias dev='kitty +kitten ssh nix-dev -t /mnt/share/additional/dotfiles/scripts/start-tmux.sh'
-alias restic_qcow='restic -r sftp:poznan-server:/mnt/drive/backups/restic_windows_images --password-command "pass ResticWindowsPassword" backup /mnt/virt/images/win11/win11.qcow2'
+alias restic_qcow='restic -r sftp:poznan-server:/mnt/drive/backups/restic_windows_images --password-command "pass restic/windows-password" backup /mnt/virt/images/win11/win11.qcow2'
 
 # Modern CLI replacements
 alias lx='eza -alhG --group-directories-first'
