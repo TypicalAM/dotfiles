@@ -41,7 +41,7 @@ config.colors = theme.main.colors()
 config.window_frame = theme.main.window_frame()
 
 config.font = wezterm.font_with_fallback({
-	{ family = "JetBrainsMonoNL Nerd Font", weight = "Regular", italic = false },
+	{ family = "Cartograph CF", weight = "Regular", italic = false },
 })
 config.initial_cols = 80 -- kitty width 700px / font ~8.75px ≈ 80 cols
 config.initial_rows = 24 -- kitty height 400px / font ~16px ≈ 24 rows
