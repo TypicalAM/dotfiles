@@ -4,7 +4,7 @@
 
 SNAPSHOT_DIR="/home/.snapshots"
 PASSWORD_FILE="/tmp/restic"
-REPO="/mnt/temp/restic_tygrys20"
+REPO="/mnt/temp/restic/tygrys20"
 
 echof() {
 	local prefix="$1"
@@ -25,11 +25,13 @@ main() {
 	sudo -u adam pass restic/snapshot-password > /tmp/restic
 	local filename=$(ls -t1 "$SNAPSHOT_DIR" | head -n 1)
 	local snapshotpath="$SNAPSHOT_DIR/$filename"
+	unlink $SNAPSHOT_DIR/latest
+	ln -s $snapshotpath $SNAPSHOT_DIR/latest
 	echof info "Using snapshot $snapshotpath"
 
 	echof info "Mounting backup drive"
 	sudo -u adam sshfs poznan-server:/mnt/drive/backups /mnt/temp -o allow_other
-	cd $snapshotpath
+	cd $SNAPSHOT_DIR/latest
 	echof info "Backing up via restic"
 	restic -r $REPO --password-file $PASSWORD_FILE backup --exclude-file /var/home/adam/additional/dotfiles/scripts/snapshot_exclude snapshot
 	echof info "Done"
