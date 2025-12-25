@@ -1,9 +1,11 @@
 ---@type Wezterm
 local wezterm = require 'wezterm'
-local theme = wezterm.plugin.require('https://github.com/neapsix/wezterm')
 
 ---@type Config
 local config = wezterm.config_builder()
+local theme = wezterm.plugin.require('https://github.com/neapsix/wezterm')
+config.colors = theme.main.colors()
+config.window_frame = theme.main.window_frame()
 
 ---@type Action
 local act = wezterm.action
@@ -37,9 +39,6 @@ wezterm.on('user-var-changed', function(window, pane, name, value)
 	end
 end)
 
-config.colors = theme.main.colors()
-config.window_frame = theme.main.window_frame()
-
 config.font = wezterm.font_with_fallback({
 	{ family = "Cartograph CF", weight = "Regular", italic = false },
 })
@@ -59,10 +58,12 @@ config.inactive_pane_hsb = {
 }
 config.window_background_opacity = 1.0
 config.text_background_opacity = 1.0
+config.warn_about_missing_glyphs = false
 
 -- Tabs
 config.use_fancy_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = false
+config.window_background_opacity = 0.85
 
 -- Keybindings
 config.keys = {
