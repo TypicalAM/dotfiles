@@ -1,0 +1,34 @@
+# ---------- core options (ranger parity) ----------
+set sortby natural          # sort natural
+set hidden false            # show_hidden false
+set preview true            # preview_files true
+set drawbox false           # draw_borders  → lf uses drawbox
+set ratios 1:2:3           # column_ratios 0  (ratios 1:2:3 keeps 3 cols)
+set number false            # no line numbers
+set relativenumber false
+set dircounts false         # automatically_count_files false
+set tabstop 8
+set timefmt 'Mon Jan _2 15:04:05 2006'
+
+# ---------- custom mappings ----------
+# fuzzy search
+map / :find $*
+
+# open in neovim
+map n $nvim $f
+
+# open with system default
+map x $xdg-open $f &
+
+# toggle tag current file
+map t :toggle *
+
+# create directory
+map mk :mkdir $*
+
+# ---------- convenience ----------
+# backspace toggles hidden files (like ranger)
+map <backspace2> :set hidden!
+
+# quick quit
+map Q :quit
