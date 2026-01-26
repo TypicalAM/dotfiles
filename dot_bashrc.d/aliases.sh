@@ -58,4 +58,3 @@ alias restic_qcow='restic -r sftp:poznan-server:/mnt/drive/backups/restic_window
 alias lx='eza -alhG --group-directories-first'
 alias cat='bat'
 alias df='duf'
-alias sed='sd'
