@@ -52,3 +52,7 @@ docs/_build/
 scripts/check_services.sh
 home/dot-tmux/plugins/*
 !home/dot-tmux/plugins/tpm
+
+dot_config/hypr/monitors.conf
+dot_config/hypr/workspaces.conf
+scripts/btrfs*
