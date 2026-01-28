@@ -63,7 +63,7 @@ config.warn_about_missing_glyphs = false
 -- Tabs
 config.use_fancy_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = false
-config.window_background_opacity = 0.85
+config.window_background_opacity = 1
 
 -- Keybindings
 config.keys = {
