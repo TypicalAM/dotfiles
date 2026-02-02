@@ -1,3 +1,7 @@
+snapshot/adam/.ssh
+snapshot/adam/.password-store
+snapshot/adam/.docker
+
 snapshot/adam/.cache
 snapshot/adam/.local/share/Steam/steamapps/common
 snapshot/adam/.local/share/containers
