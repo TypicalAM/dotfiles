@@ -56,7 +56,7 @@ setup_if_available('basedpyright', {
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
     --[[     client.server_capabilities.hoverProvider = false ]]
-    client.server_capabilities.completionProvider = nil
+    --[[     client.server_capabilities.completionProvider = nil ]]
     --[[     client.server_capabilities.signatureHelpProvider = nil ]]
     --[[     client.server_capabilities.definitionProvider = false ]]
     --[[     client.server_capabilities.referencesProvider = false ]]
