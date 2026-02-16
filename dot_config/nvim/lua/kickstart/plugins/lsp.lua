@@ -1,9 +1,28 @@
 require('mason').setup()
 
 local lspconfig = require 'lspconfig'
-lspconfig.nil_ls.setup {}
 
-lspconfig.ruff.setup {
+local function lsp_available(server_name)
+  local config = lspconfig[server_name]
+  if not config then return false end
+  local cmd = config.document_config and config.document_config.default_config and config.document_config.default_config.cmd
+  if cmd and cmd[1] then
+    return vim.fn.executable(cmd[1]) == 1
+  end
+  return false
+end
+
+local function setup_if_available(server_name, opts)
+  if lsp_available(server_name) then
+    lspconfig[server_name].setup(opts or {})
+    return true
+  end
+  return false
+end
+
+setup_if_available('nil_ls')
+
+setup_if_available('ruff', {
   settings = {
     ruff = {
       cmd = { 'ruff', 'server' },
@@ -12,9 +31,9 @@ lspconfig.ruff.setup {
       settings = {},
     },
   },
-}
+})
 
-lspconfig.basedpyright.setup {
+setup_if_available('basedpyright', {
   settings = {
     basedpyright = {
       disablePullDiagnostics = true,      -- disables server -> client diagnostic push
@@ -50,17 +69,17 @@ lspconfig.basedpyright.setup {
     --[[     client.server_capabilities.semanticTokensProvider = nil ]]
     --[[     client.server_capabilities.typeDefinitionProvider = false ]]
     client.server_capabilities.implementationProvider = false
-    -- Leave only documentSymbolProvider
   end,
-}
+})
 
-lspconfig.lua_ls.setup {
-  Lua = {
-    workspace = { checkThirdParty = false },
-    telemetry = { enable = false },
-    -- diagnostics = { disable = { 'missing-fields' } },
+setup_if_available('lua_ls', {
+  settings = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+    },
   },
-}
+})
 
 -- blink.cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = require('blink.cmp').get_lsp_capabilities()
@@ -69,6 +88,7 @@ require('mason-lspconfig').setup {
   automatic_installation = false,
   handlers = {
     function(server_name)
+      if not lsp_available(server_name) then return end
       local server = servers[server_name] or {}
       server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
       require('lspconfig')[server_name].setup(server)
