@@ -53,7 +53,7 @@ gotest() {
 pcd() {
 	local choice
 	if choice="$(fzf <~/additional/projects)"; then
-		cd "/home/adam/$choice" || return
+		cd "$HOME/$choice" || return
 	fi
 }
 
