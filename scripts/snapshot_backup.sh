@@ -22,7 +22,7 @@ echof() {
 
 main() {
 	echof info "Backing up the latest snapshot"
-	sudo -u adam pass restic/snapshot-password > /tmp/restic
+	sudo -u adam pass restic/tygrys20 > /tmp/restic
 	local filename=$(ls -t1 "$SNAPSHOT_DIR" | head -n 1)
 	local snapshotpath="$SNAPSHOT_DIR/$filename"
 	unlink $SNAPSHOT_DIR/latest
