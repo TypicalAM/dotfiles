@@ -1,0 +1,83 @@
+# Main background, empty for terminal default, need to be empty if you want transparent background
+theme[main_bg]="#191724"
+
+# Main text color
+theme[main_fg]="#e0def4"
+
+# Title color for boxes
+theme[title]="#e0def4"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#c4a7e7"
+
+# Background color of selected item in processes box
+theme[selected_bg]="#403d52"
+
+# Foreground color of selected item in processes box
+theme[selected_fg]="#c4a7e7"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#6e6a86"
+
+# Color of text appearing on top of graphs, i.e uptime and current network graph scaling
+theme[graph_text]="#ebbcba"
+
+# Background color of the percentage meters
+theme[meter_bg]="#26233a"
+
+# Misc colors for processes box including mini cpu graphs, details memory graph and details status text
+theme[proc_misc]="#ebbcba"
+
+# CPU, Memory, Network, Proc box outline colors
+theme[cpu_box]="#c4a7e7"
+theme[mem_box]="#9ccfd8"
+theme[net_box]="#eb6f92"
+theme[proc_box]="#31748f"
+
+# Box divider line and small boxes line color
+theme[div_line]="#26233a"
+
+# Temperature graph color (Foam -> Gold -> Love)
+theme[temp_start]="#9ccfd8"
+theme[temp_mid]="#f6c177"
+theme[temp_end]="#eb6f92"
+
+# CPU graph colors (Foam -> Iris -> Love)
+theme[cpu_start]="#9ccfd8"
+theme[cpu_mid]="#c4a7e7"
+theme[cpu_end]="#eb6f92"
+
+# Mem/Disk free meter (Iris -> Foam -> Pine)
+theme[free_start]="#c4a7e7"
+theme[free_mid]="#9ccfd8"
+theme[free_end]="#31748f"
+
+# Mem/Disk cached meter (Foam -> Iris -> Pine)
+theme[cached_start]="#9ccfd8"
+theme[cached_mid]="#c4a7e7"
+theme[cached_end]="#31748f"
+
+# Mem/Disk available meter (Gold -> Rose -> Love)
+theme[available_start]="#f6c177"
+theme[available_mid]="#ebbcba"
+theme[available_end]="#eb6f92"
+
+# Mem/Disk used meter (Pine -> Foam -> Iris)
+theme[used_start]="#31748f"
+theme[used_mid]="#9ccfd8"
+theme[used_end]="#c4a7e7"
+
+# Download graph colors (Gold -> Rose -> Love)
+theme[download_start]="#f6c177"
+theme[download_mid]="#ebbcba"
+theme[download_end]="#eb6f92"
+
+# Upload graph colors (Pine -> Foam -> Iris)
+theme[upload_start]="#31748f"
+theme[upload_mid]="#9ccfd8"
+theme[upload_end]="#c4a7e7"
+
+# Process box color gradient (Foam -> Iris -> Love)
+theme[process_start]="#9ccfd8"
+theme[process_mid]="#c4a7e7"
+theme[process_end]="#eb6f92"
