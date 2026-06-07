@@ -133,9 +133,23 @@ require('lazy').setup({
       },
 
       completion = {
-        -- By default, you may press `<c-space>` to show the documentation.
-        -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        menu = {
+          border = 'rounded',
+          winhighlight = 'Normal:BlinkCmpMenu,FloatBorder:BlinkCmpMenuBorder,CursorLine:BlinkCmpMenuSelection,Search:None',
+          draw = {
+            gap = 1,
+            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'kind' } },
+          },
+        },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 200,
+          window = {
+            border = 'rounded',
+            winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc',
+          },
+        },
+        ghost_text = { enabled = true },
       },
 
       sources = {
@@ -147,17 +161,15 @@ require('lazy').setup({
 
       snippets = { preset = 'luasnip' },
 
-      -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-      -- which automatically downloads a prebuilt binary when enabled.
-      --
-      -- By default, we use the Lua implementation instead, but you may enable
-      -- the rust implementation via `'prefer_rust_with_warning'`
-      --
-      -- See :h blink-cmp-config-fuzzy for more information
       fuzzy = { implementation = 'lua' },
 
-      -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = {
+        enabled = true,
+        window = {
+          border = 'rounded',
+          winhighlight = 'Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder',
+        },
+      },
     },
   },
 
@@ -235,10 +247,87 @@ require('lazy').setup({
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
+    config = function()
+      require('nvim-treesitter.install').install({
+        'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash',
+      })
+
+      -- Shim removed nvim-treesitter v0 APIs that telescope (and other plugins) still call
+      local parsers = require('nvim-treesitter.parsers')
+      if not parsers.ft_to_lang then
+        parsers.ft_to_lang = function(ft)
+          return vim.treesitter.language.get_lang(ft) or ft
+        end
+        parsers.get_parser = function(bufnr, lang)
+          return vim.treesitter.get_parser(bufnr, lang)
+        end
+      end
+      package.loaded['nvim-treesitter.configs'] = {
+        is_enabled = function() return false end,
+        get_module = function(name)
+          if name == 'highlight' then
+            return { additional_vim_regex_highlighting = false }
+          end
+          return {}
+        end,
+      }
+
+      -- Treesitter-based indentation
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          if pcall(vim.treesitter.get_parser, 0) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+
+      -- Textobjects: select
+      local to_select = require('nvim-treesitter-textobjects.select')
+      require('nvim-treesitter-textobjects').setup { select = { lookahead = true } }
+      local select_maps = {
+        aa = '@parameter.outer', ia = '@parameter.inner',
+        af = '@function.outer',  ['if'] = '@function.inner',
+        ac = '@class.outer',     ic = '@class.inner',
+      }
+      for lhs, capture in pairs(select_maps) do
+        vim.keymap.set({ 'x', 'o' }, lhs, function()
+          to_select.select_textobject(capture, 'textobjects')
+        end)
+      end
+
+      -- Textobjects: move
+      local to_move = require('nvim-treesitter-textobjects.move')
+      local move_maps = {
+        [']m']  = { 'next_start',    '@function.outer' },
+        [']]']  = { 'next_start',    '@class.outer'    },
+        [']M']  = { 'next_end',      '@function.outer' },
+        ['][']  = { 'next_end',      '@class.outer'    },
+        ['[m']  = { 'previous_start','@function.outer' },
+        ['[[']  = { 'previous_start','@class.outer'    },
+        ['[M']  = { 'previous_end',  '@function.outer' },
+        ['[]']  = { 'previous_end',  '@class.outer'    },
+      }
+      for lhs, v in pairs(move_maps) do
+        local dir, capture = v[1], v[2]
+        vim.keymap.set('n', lhs, function()
+          to_move['goto_' .. dir](capture, 'textobjects')
+        end)
+      end
+
+      -- Textobjects: swap
+      local to_swap = require('nvim-treesitter-textobjects.swap')
+      vim.keymap.set('n', '<leader>a', function()
+        to_swap.swap_next('@parameter.inner', 'textobjects')
+      end)
+      vim.keymap.set('n', '<leader>A', function()
+        to_swap.swap_previous('@parameter.inner', 'textobjects')
+      end)
+    end,
   },
 
   {
@@ -287,75 +376,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
--- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
-vim.defer_fn(function()
-  require('nvim-treesitter.configs').setup {
-    -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
-
-    -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = false,
-
-    highlight = { enable = true },
-    indent = { enable = true },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = '<c-space>',
-        node_incremental = '<c-space>',
-        scope_incremental = '<c-s>',
-        node_decremental = '<M-space>',
-      },
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-        keymaps = {
-          -- You can use the capture groups defined in textobjects.scm
-          ['aa'] = '@parameter.outer',
-          ['ia'] = '@parameter.inner',
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['ac'] = '@class.outer',
-          ['ic'] = '@class.inner',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        goto_next_start = {
-          [']m'] = '@function.outer',
-          [']]'] = '@class.outer',
-        },
-        goto_next_end = {
-          [']M'] = '@function.outer',
-          [']['] = '@class.outer',
-        },
-        goto_previous_start = {
-          ['[m'] = '@function.outer',
-          ['[['] = '@class.outer',
-        },
-        goto_previous_end = {
-          ['[M'] = '@function.outer',
-          ['[]'] = '@class.outer',
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['<leader>a'] = '@parameter.inner',
-        },
-        swap_previous = {
-          ['<leader>A'] = '@parameter.inner',
-        },
-      },
-    },
-  }
-end, 0)
 
 require 'kickstart.keymaps'
 require 'kickstart.plugins.lsp'
