@@ -1,24 +1,49 @@
 gui:
   theme:
     activeBorderColor:
-      - '#7dc4e4'
+      - '#c4a7e7'
       - bold
     inactiveBorderColor:
-      - '#a5adcb'
+      - '#6e6a86'
     optionsTextColor:
-      - '#8aadf4'
+      - '#9ccfd8'
     selectedLineBgColor:
-      - '#363a4f'
+      - '#403d52'
     cherryPickedCommitBgColor:
-      - '#494d64'
+      - '#403d52'
     cherryPickedCommitFgColor:
-      - '#7dc4e4'
+      - '#f6c177'
+      - bold
+    markedBaseCommitBgColor:
+      - '#403d52'
+    markedBaseCommitFgColor:
+      - '#9ccfd8'
+      - bold
     unstagedChangesColor:
-      - '#ed8796'
+      - '#eb6f92'
     defaultFgColor:
-      - '#cad3f5'
+      - '#e0def4'
     searchingActiveBorderColor:
-      - '#eed49f'
+      - '#f6c177'
 
   authorColors:
-    '*': '#b7bdf8'
+    'Adam': '#c4a7e7'
+    'adam': '#c4a7e7'
+    'Claude': '#ebbcba'
+    'claude': '#ebbcba'
+    '*': '#9ccfd8'
+
+  branchColors:
+    'main': '#c4a7e7'
+    'master': '#c4a7e7'
+    'develop': '#9ccfd8'
+    'feature': '#31748f'
+    'feat': '#31748f'
+    'fix': '#eb6f92'
+    'hotfix': '#eb6f92'
+    'bug': '#eb6f92'
+    'release': '#f6c177'
+    'chore': '#ebbcba'
+    'docs': '#9ccfd8'
+    'refactor': '#c4a7e7'
+    'test': '#f6c177'
