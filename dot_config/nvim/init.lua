@@ -261,9 +261,9 @@ require('lazy').setup({
         vim.cmd('FloatermNew --height=0.6 --width=0.6 --wintype=float --position=center --autoclose=0 git push')
       end, { desc = "Fancy git push" })
 
-      vim.api.nvim_create_user_command('FancyGitStatus', function()
-        vim.cmd('FloatermNew --height=0.6 --width=0.6 --wintype=float --position=center --autoclose=0 git status')
-      end, { desc = "Fancy git status" })
+      vim.api.nvim_create_user_command('FancyShell', function()
+        vim.cmd('FloatermNew --height=0.9 --width=0.9 --wintype=float --position=center')
+      end, { desc = "Inline shell" })
 
       vim.api.nvim_create_user_command('LazyGit', function()
         vim.cmd('FloatermNew --height=0.9 --width=0.9 --wintype=float --position=center --autoclose=2 lazygit')
