@@ -1,6 +1,6 @@
 {
   "bar.customModules.storage.paths": [
-    "/"
+    "/var/home/adam"
   ],
   "theme.font.name": "JetBrainsMono Nerd Font",
   "theme.font.label": "JetBrainsMono Nerd Font Bold",
@@ -95,5 +95,24 @@
   "theme.bar.buttons.modules.microphone.text": "#f5e0dc",
   "theme.bar.buttons.modules.microphone.icon": "#f5e0dc",
   "theme.bar.buttons.modules.microphone.border": "#f5e0dc",
-  "theme.font.icon": "1.35rem"
+  "theme.font.icon": "1.35rem",
+  "notifications.showActionsOnHover": false,
+  "theme.notification.close_button.background": "#191924",
+  "theme.notification.close_button.label": "#f38ba8",
+  "theme.notification.background": "#191924",
+  "theme.notification.actions.text": "#191924",
+  "theme.osd.orientation": "vertical",
+  "theme.osd.location": "right",
+  "theme.osd.enableShadow": true,
+  "theme.osd.border.size": "0.003em",
+  "theme.osd.muted_zero": true,
+  "menus.clock.time.hideSeconds": true,
+  "menus.clock.weather.unit": "metric",
+  "menus.clock.weather.location": "Poznań",
+  "menus.dashboard.powermenu.avatar.image": "/home/adam/normalne.png",
+  "menus.dashboard.controls.enabled": false,
+  "menus.dashboard.stats.enabled": false,
+  "bar.customModules.storage.tooltipStyle": "percentage-bar",
+  "bar.customModules.netstat.dynamicIcon": true,
+  "theme.bar.buttons.modules.kbLayout.enableBorder": false
 }

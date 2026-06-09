@@ -5,7 +5,7 @@ get_mic_status() {
   if [[ "$output" == *"[MUTED]" ]]; then
     echo " Muted"
   else
-    echo " $(echo "$output" | cut -c 11-)%"
+    echo " $(echo "$output" | cut -c 9-)%"
   fi
 }
 

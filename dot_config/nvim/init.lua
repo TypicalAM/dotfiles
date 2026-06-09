@@ -254,7 +254,7 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter.install').install({
+      require('nvim-treesitter.install').ensure_installed({
         'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash',
       })
 
@@ -270,9 +270,13 @@ require('lazy').setup({
       end
       package.loaded['nvim-treesitter.configs'] = {
         is_enabled = function() return false end,
+        setup = function() end,
         get_module = function(name)
           if name == 'highlight' then
             return { additional_vim_regex_highlighting = false }
+          end
+          if name == 'textobjects.select' then
+            return { lookahead = true, keymaps = {}, selection_modes = {} }
           end
           return {}
         end,
@@ -288,8 +292,7 @@ require('lazy').setup({
       })
 
       -- Textobjects: select
-      local to_select = require('nvim-treesitter-textobjects.select')
-      require('nvim-treesitter-textobjects').setup { select = { lookahead = true } }
+      local to_select = require('nvim-treesitter.textobjects.select')
       local select_maps = {
         aa = '@parameter.outer', ia = '@parameter.inner',
         af = '@function.outer',  ['if'] = '@function.inner',
@@ -302,7 +305,7 @@ require('lazy').setup({
       end
 
       -- Textobjects: move
-      local to_move = require('nvim-treesitter-textobjects.move')
+      local to_move = require('nvim-treesitter.textobjects.move')
       local move_maps = {
         [']m']  = { 'next_start',    '@function.outer' },
         [']]']  = { 'next_start',    '@class.outer'    },
@@ -321,7 +324,7 @@ require('lazy').setup({
       end
 
       -- Textobjects: swap
-      local to_swap = require('nvim-treesitter-textobjects.swap')
+      local to_swap = require('nvim-treesitter.textobjects.swap')
       vim.keymap.set('n', '<leader>a', function()
         to_swap.swap_next('@parameter.inner', 'textobjects')
       end)

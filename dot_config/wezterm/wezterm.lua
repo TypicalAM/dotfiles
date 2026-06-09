@@ -56,14 +56,14 @@ config.inactive_pane_hsb = {
 	saturation = 1.0,
 	brightness = 1.0,
 }
-config.window_background_opacity = 1.0
-config.text_background_opacity = 1.0
+config.window_background_opacity = 0.95
+config.text_background_opacity = 0.95
 config.warn_about_missing_glyphs = false
 
 -- Tabs
 config.use_fancy_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = false
-config.window_background_opacity = 1
+config.window_background_opacity = 0.95
 
 -- Keybindings
 config.keys = {
@@ -147,7 +147,7 @@ config.keys = {
 	},
 	{
 		key = "r",
-		mods = "CTRL",
+		mods = "CTRL|SHIFT",
 		action = wezterm.action.PromptInputLine {
 			description = 'Enter new name for workspace',
 			action = wezterm.action_callback(function(window, pane, line)
