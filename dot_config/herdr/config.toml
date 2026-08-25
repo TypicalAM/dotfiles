@@ -1,0 +1,14 @@
+onboarding = false
+
+[ui.toast]
+delivery = "off"
+
+[ui]
+show_agent_labels_on_pane_borders = true
+
+agent_panel_sort = "spaces"
+[experimental]
+pane_history = false
+
+[keys]
+prefix = "ctrl+space"
