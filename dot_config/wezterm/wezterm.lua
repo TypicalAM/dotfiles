@@ -56,14 +56,64 @@ config.inactive_pane_hsb = {
 	saturation = 1.0,
 	brightness = 1.0,
 }
+-- A deep indigo/violet gradient inspired by the reference image.  Keeping the
+-- cell background slightly translucent lets the gradient show through without
+-- sacrificing text contrast.
+config.window_background_gradient = {
+	colors = {
+		"#05070d",
+		"#10152b",
+		"#24183d",
+		"#0b1022",
+		"#05070d",
+	},
+	orientation = {
+		Linear = {
+			angle = -35.0,
+		},
+	},
+	interpolation = "Linear",
+	blend = "Rgb",
+}
 config.window_background_opacity = 0.95
-config.text_background_opacity = 0.95
+config.text_background_opacity = 0.84
 config.warn_about_missing_glyphs = false
+
+-- Let the tab strip reveal the same gradient instead of painting an opaque
+-- rectangle over it.  This is the top bar WezTerm can control on Linux.
+config.colors.tab_bar = {
+	background = "rgba(0, 0, 0, 0)",
+	active_tab = {
+		bg_color = "rgba(0, 0, 0, 0)",
+		fg_color = "#d8dee9",
+	},
+	inactive_tab = {
+		bg_color = "rgba(0, 0, 0, 0)",
+		fg_color = "#6b7280",
+	},
+	inactive_tab_hover = {
+		bg_color = "rgba(255, 255, 255, 0.08)",
+		fg_color = "#cbd5e1",
+	},
+	new_tab = {
+		bg_color = "rgba(0, 0, 0, 0)",
+		fg_color = "#6b7280",
+	},
+	new_tab_hover = {
+		bg_color = "rgba(255, 255, 255, 0.08)",
+		fg_color = "#cbd5e1",
+	},
+}
+
+-- On platforms where WezTerm owns the title bar, keep its colors transparent
+-- as well.  Native compositor decorations cannot be made gradient-filled.
+config.window_frame.active_titlebar_bg = "rgba(0, 0, 0, 0)"
+config.window_frame.inactive_titlebar_bg = "rgba(0, 0, 0, 0)"
 
 -- Tabs
 config.use_fancy_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = false
-config.window_background_opacity = 0.95
+config.window_background_opacity = 1
 
 -- Keybindings
 config.keys = {
@@ -98,22 +148,22 @@ config.keys = {
 	{ key = "6",          mods = "ALT",        action = wezterm.action.ActivateTab(5) },
 
 	-- Ctrl+T: open new tab
-	{
-		key = "t",
-		mods = "CTRL",
-		action = wezterm.action_callback(function(win, pane)
-			local cmd_context = wezterm.json_parse(pane:get_user_vars()["is-distrobox"])
-			if cmd_context.container ~= "none" then
-				win:perform_action(
-					wezterm.action { SpawnCommandInNewTab = {
-						args = { "distrobox", "enter", cmd_context.container }
-					} }, pane)
-			else
-				win:perform_action(wezterm.action { SpawnTab = "DefaultDomain" }, pane)
-			end
-		end
-		)
-	},
+	-- {
+	-- 	key = "t",
+	-- 	mods = "CTRL",
+	-- 	action = wezterm.action_callback(function(win, pane)
+	-- 		local cmd_context = wezterm.json_parse(pane:get_user_vars()["is-distrobox"])
+	-- 		if cmd_context.container ~= "none" then
+	-- 			win:perform_action(
+	-- 				wezterm.action { SpawnCommandInNewTab = {
+	-- 					args = { "distrobox", "enter", cmd_context.container }
+	-- 				} }, pane)
+	-- 		else
+	-- 			win:perform_action(wezterm.action { SpawnTab = "DefaultDomain" }, pane)
+	-- 		end
+	-- 	end
+	-- 	)
+	-- },
 	{
 		key = "s",
 		mods = "CTRL",
@@ -121,30 +171,31 @@ config.keys = {
 			flags = 'FUZZY|WORKSPACES',
 		}
 	},
-	{
-		key = "n",
-		mods = "CTRL",
-		action = wezterm.action.PromptInputLine {
-			description = wezterm.format {
-				{ Attribute = { Intensity = 'Bold' } },
-				{ Foreground = { AnsiColor = 'Red' } },
-				{ Text = 'Enter name for new workspace' },
-			},
-			action = wezterm.action_callback(function(window, pane, line)
-				-- line will be `nil` if they hit escape without entering anything
-				-- An empty string if they just hit enter
-				-- Or the actual line of text they wrote
-				if line and line ~= "" then
-					window:perform_action(
-						wezterm.action.SwitchToWorkspace {
-							name = line,
-						},
-						pane
-					)
-				end
-			end),
-		}
-	},
+	-- Ctrl+N: new workspace (handled by Herdr instead)
+	-- {
+	-- 	key = "n",
+	-- 	mods = "CTRL",
+	-- 	action = wezterm.action.PromptInputLine {
+	-- 		description = wezterm.format {
+	-- 			{ Attribute = { Intensity = 'Bold' } },
+	-- 			{ Foreground = { AnsiColor = 'Red' } },
+	-- 			{ Text = 'Enter name for new workspace' },
+	-- 		},
+	-- 		action = wezterm.action_callback(function(window, pane, line)
+	-- 			-- line will be `nil` if they hit escape without entering anything
+	-- 			-- An empty string if they just hit enter
+	-- 			-- Or the actual line of text they wrote
+	-- 			if line and line ~= "" then
+	-- 				window:perform_action(
+	-- 					wezterm.action.SwitchToWorkspace {
+	-- 						name = line,
+	-- 					},
+	-- 					pane
+	-- 				)
+	-- 			end
+	-- 		end),
+	-- 	}
+	-- },
 	{
 		key = "r",
 		mods = "CTRL|SHIFT",
