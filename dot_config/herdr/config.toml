@@ -5,6 +5,7 @@ delivery = "off"
 
 [ui]
 show_agent_labels_on_pane_borders = true
+prompt_new_tab_name = false
 
 agent_panel_sort = "spaces"
 [experimental]
@@ -12,3 +13,8 @@ pane_history = false
 
 [keys]
 prefix = "ctrl+space"
+switch_workspace = "alt+1..9"
+new_tab = "ctrl+t"
+new_workspace = "ctrl+n"
+rename_tab = "ctrl+r"
+rename_workspace = "ctrl+shift+r"
