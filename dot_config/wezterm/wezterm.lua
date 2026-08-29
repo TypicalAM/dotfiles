@@ -129,6 +129,19 @@ config.keys = {
 	-- Config reload
 	{ key = "R",          mods = "CTRL|ALT",   action = wezterm.action.ReloadConfiguration },
 
+	-- Herdr owns these shortcuts; disable WezTerm's defaults so they pass through.
+	{ key = "R",          mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
+	{ key = "r",          mods = "CTRL|SHIFT", action = wezterm.action.DisableDefaultAssignment },
+	{ key = "1",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "2",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "3",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "4",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "5",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "6",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "7",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "8",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+	{ key = "9",          mods = "ALT",        action = wezterm.action.DisableDefaultAssignment },
+
 	-- Ctrl+Enter → send ESC (\u001b)
 	{ key = "Enter",      mods = "CTRL",       action = wezterm.action.SendString("\u{1b}") },
 
@@ -138,14 +151,6 @@ config.keys = {
 	-- Alt+Left/Right: previous/next tab
 	{ key = "LeftArrow",  mods = "ALT",        action = wezterm.action.ActivateTabRelative(-1) },
 	{ key = "RightArrow", mods = "ALT",        action = wezterm.action.ActivateTabRelative(1) },
-
-	-- Alt+1..6: switch to tab index 0..5
-	{ key = "1",          mods = "ALT",        action = wezterm.action.ActivateTab(0) },
-	{ key = "2",          mods = "ALT",        action = wezterm.action.ActivateTab(1) },
-	{ key = "3",          mods = "ALT",        action = wezterm.action.ActivateTab(2) },
-	{ key = "4",          mods = "ALT",        action = wezterm.action.ActivateTab(3) },
-	{ key = "5",          mods = "ALT",        action = wezterm.action.ActivateTab(4) },
-	{ key = "6",          mods = "ALT",        action = wezterm.action.ActivateTab(5) },
 
 	-- Ctrl+T: open new tab
 	-- {
@@ -196,21 +201,6 @@ config.keys = {
 	-- 		end),
 	-- 	}
 	-- },
-	{
-		key = "r",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.PromptInputLine {
-			description = 'Enter new name for workspace',
-			action = wezterm.action_callback(function(window, pane, line)
-				-- line will be `nil` if they hit escape without entering anything
-				-- An empty string if they just hit enter
-				-- Or the actual line of text they wrote
-				if line and line ~= "" then
-					wezterm.mux.rename_workspace(window:active_workspace(), line)
-				end
-			end),
-		},
-	},
 	{
 		key = 'y',
 		mods = 'CTRL',

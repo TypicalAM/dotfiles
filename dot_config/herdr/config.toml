@@ -13,8 +13,8 @@ pane_history = false
 
 [keys]
 prefix = "ctrl+space"
-switch_workspace = "ctrl+alt+1..9"
+switch_workspace = "alt+1..9"
 new_tab = "ctrl+alt+t"
 new_workspace = "ctrl+n"
 rename_tab = "ctrl+r"
-rename_workspace = "ctrl+alt+w"
+rename_workspace = "ctrl+shift+r"
