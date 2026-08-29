@@ -1,0 +1,11 @@
+[Unit]
+Description=dictator Right Ctrl hold-to-talk
+After=graphical-session.target
+
+[Service]
+ExecStart=/home/adam/code/operating-systems/dictator/run-hold.sh
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
