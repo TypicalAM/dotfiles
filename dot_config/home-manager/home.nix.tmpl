@@ -1,0 +1,30 @@
+{ pkgs, ... }:
+{
+  home.username = "{{ .chezmoi.username }}";
+  home.homeDirectory = "{{ .chezmoi.homeDir }}";
+  home.stateVersion = "25.05"; # don't change after first switch
+
+  # Lets `home-manager` manage itself, so the CLI stays on your profile.
+  programs.home-manager.enable = true;
+
+  # ---- your "profile": declarative packages ----
+  home.packages = with pkgs; [
+    ripgrep
+    fd
+    jq
+    bat
+    fzf
+    eza
+  ];
+
+  # ---- example program config (delete what you don't want) ----
+  programs.git = {
+    enable = true;
+    userEmail = "tpam_piaseczny@protonmail.com";
+  };
+
+  # You already manage zsh via chezmoi (dot_zshrc); leave Home Manager
+  # out of it unless you want to migrate that config here too.
+
+  home.enableNixpkgsReleaseCheck = false;
+}

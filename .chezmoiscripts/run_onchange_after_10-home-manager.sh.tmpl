@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Re-run only when the profile changes (these hashes change the script body):
+# flake.nix hash: {{ include "dot_config/home-manager/flake.nix" | sha256sum }}
+# home.nix  hash: {{ include "dot_config/home-manager/home.nix.tmpl" | sha256sum }}
+
+FLAKE="$HOME/.config/home-manager"
+
+echo ">> Applying Home Manager profile from $FLAKE"
+if command -v home-manager >/dev/null 2>&1; then
+  home-manager switch --flake "$FLAKE"
+else
+  # First run: Home Manager CLI isn't on the profile yet.
+  nix run home-manager/master -- switch --flake "$FLAKE"
+fi
