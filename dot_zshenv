@@ -1,0 +1,12 @@
+# The /etc rc chain (/etc/zprofile -> /etc/profile -> /etc/profile.d/*.sh)
+# costs ~25ms per shell: it forks flatpak, hostnamectl and id, none of which
+# produce anything that changes between shells. Replay a cached snapshot of
+# its result instead, and fall back to the real thing whenever the snapshot
+# is missing or older than the files it was built from.
+() {
+	local snap=$HOME/.cache/zsh/system-env.zsh
+	[[ -s $snap && $snap -nt /etc/profile && $snap -nt /etc/profile.d ]] || return
+	unsetopt GLOBAL_RCS
+	source $snap
+	typeset -g __SYSENV_REPLAYED=1
+}
