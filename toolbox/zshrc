@@ -1,0 +1,49 @@
+# zshrc for the portable toolbox AppImage.
+#
+# Not the same file as ~/.zshrc: no oh-my-zsh, no nvm, no host paths. It sources
+# ~/.bashrc.d/* from the dotfiles so aliases and functions behave the same.
+
+HISTFILE="$XDG_STATE_HOME/zsh_history"
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt inc_append_history extended_history hist_ignore_dups hist_ignore_space
+setopt autocd interactive_comments no_beep
+
+bindkey -e
+autoload -Uz zmv
+
+fpath=(@completions@ $fpath)
+autoload -Uz compinit && compinit -d "$XDG_CACHE_HOME/zcompdump"
+autoload -U +X bashcompinit && bashcompinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# aliases / exports / functions straight from the dotfiles
+if [ -d "$HOME/.bashrc.d" ]; then
+	for rc in "$HOME"/.bashrc.d/*; do
+		[ -r "$rc" ] && . "$rc"
+	done
+	unset rc
+fi
+
+# after .bashrc.d, which prepends host-shaped paths that do not exist here
+export PATH="$TOOLBOX_ENV/bin:$HOME/bin:$PATH"
+
+# Prompt, plugins and keybindings only make sense for a real shell session.
+# `toolbox -c '...'` also sources this file (so aliases and functions work), but
+# there is no line editor there and the plugin inits would spew errors.
+if [ -n "${TOOLBOX_SHELL_SESSION-}" ] && [[ -o zle ]]; then
+	source @autosuggestions@
+	source @syntaxhighlighting@
+
+	eval "$(fzf --zsh)"
+	eval "$(zoxide init zsh)"
+
+	if [ -r "$XDG_CONFIG_HOME/ohmyposh/my_custom_rose_theme.json" ]; then
+		eval "$(oh-my-posh init zsh --config "$XDG_CONFIG_HOME/ohmyposh/my_custom_rose_theme.json")"
+	else
+		eval "$(starship init zsh)"
+	fi
+
+	print -P "%F{cyan}${TOOLBOX_NAME}%f %F{8}| $(command ls "$TOOLBOX_ENV/bin" | wc -l) tools | state: ${TOOLBOX_ROOT}%f"
+fi

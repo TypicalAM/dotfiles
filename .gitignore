@@ -6,7 +6,6 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-bin/
 build/
 develop-eggs/
 dist/
@@ -56,3 +55,6 @@ home/dot-tmux/plugins/*
 dot_config/hypr/monitors.conf
 dot_config/hypr/workspaces.conf
 scripts/btrfs*
+
+# toolbox/vulncheck.sh reports
+sbom/
