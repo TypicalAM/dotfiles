@@ -29,6 +29,17 @@ fi
 # after .bashrc.d, which prepends host-shaped paths that do not exist here
 export PATH="$TOOLBOX_ENV/bin:$HOME/bin:$PATH"
 
+# Host root is unmapped in the toolbox's user namespace, so setuid binaries see
+# themselves owned by nobody and sudo refuses to run. Hand it to the host's
+# systemd user manager, which runs it outside the namespace. The command then
+# resolves on the host: toolbox tools are not available under sudo.
+sudo() {
+	local io=--pipe
+	[[ -t 0 && -t 1 ]] && io=--pty
+	XDG_RUNTIME_DIR=/run/user/$UID command systemd-run --user --quiet --same-dir $io \
+		-- sudo "$@"
+}
+
 # Prompt, plugins and keybindings only make sense for a real shell session.
 # `toolbox -c '...'` also sources this file (so aliases and functions work), but
 # there is no line editor there and the plugin inits would spew errors.
@@ -42,7 +53,8 @@ if [ -n "${TOOLBOX_SHELL_SESSION-}" ] && [[ -o zle ]]; then
 		local -a words=(${(z)BUFFER})
 		local cmd=${words[1]-} file magic
 		if [[ $cmd == */* ]]; then file=${~cmd}; else file=$(whence -p -- "$cmd"); fi
-		if [[ -n $file && -f $file && -x $file ]] &&
+		# -r: sudo and friends are execute-only, and a failed redirect isn't silenced
+		if [[ -n $file && -f $file && -x $file && -r $file ]] &&
 			sysread -s 11 magic <"$file" 2>/dev/null && [[ ${magic[9,11]} == $'AI\x02' ]]; then
 			print -s -- "$BUFFER"
 			print
