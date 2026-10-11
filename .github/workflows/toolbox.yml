@@ -1,0 +1,51 @@
+name: Build toolbox
+run-name: Build toolbox
+
+# Publishes .#toolbox to the rolling "toolbox" release so consumers (e.g. the
+# lupus21 image) can download it instead of building it themselves:
+#   https://github.com/TypicalAM/dotfiles/releases/download/toolbox/toolbox.AppImage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'toolbox/**'
+      - 'flake.nix'
+      - 'flake.lock'
+      - '.github/workflows/toolbox.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: toolbox
+  cancel-in-progress: true
+
+jobs:
+  toolbox:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+
+    - name: Install nix
+      uses: cachix/install-nix-action@v31
+
+    - name: Build toolbox AppImage
+      run: |
+        nix build .#toolbox --out-link result
+        install -m 755 "$(readlink -f result)" toolbox.AppImage
+
+    - name: Publish release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        notes="Built from ${GITHUB_SHA}"
+        if gh release view toolbox >/dev/null 2>&1; then
+          gh release upload toolbox toolbox.AppImage --clobber
+          gh release edit toolbox --notes "$notes"
+        else
+          gh release create toolbox toolbox.AppImage --title "toolbox" --notes "$notes" --target "$GITHUB_SHA"
+        fi
