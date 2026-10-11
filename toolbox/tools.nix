@@ -45,6 +45,7 @@ let
       zoxide
       lf
       sd
+      ranger
     ];
 
     # Talking to things.
