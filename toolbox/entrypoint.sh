@@ -6,6 +6,16 @@
 # trace on the host.
 set -eu
 
+# Started from inside a toolbox, whose environment is still exported. Normally
+# the AppImage runtime already fails on FUSE before getting here (and the
+# toolbox shell refuses it at the prompt), but extract-and-run gets this far; a
+# toolbox in a toolbox only stacks namespaces and state dirs.
+if [ -n "${TOOLBOX_ENV-}" ]; then
+	printf '%s: already inside %s (state: %s); exit to get back to the host\n' \
+		@name@ "${TOOLBOX_NAME:-a toolbox}" "${TOOLBOX_ROOT:-?}" >&2
+	exit 1
+fi
+
 TOOLBOX_NAME=@name@
 TOOLBOX_ENV=@env@
 TOOLBOX_SEED=@seed@
@@ -32,6 +42,15 @@ export TERM="${TERM:-xterm-256color}"
 image="${APPIMAGE:-${ARGV0:-$0}}"
 root="$(cd -- "$(dirname -- "$image")" && pwd)"
 state="${TOOLBOX_STATE:-$root/.$TOOLBOX_NAME}"
+
+# Installed somewhere read-only (/usr/bin on an image-based system), the state
+# can't live next to the image, so it goes to the host's config dir instead.
+# Resolved here, before XDG_CONFIG_HOME is repointed into the state itself.
+state_fallback=
+if [ -z "${TOOLBOX_STATE-}" ] && [ ! -d "$state" ] && [ ! -w "$root" ]; then
+	state="${XDG_CONFIG_HOME:-${HOME:?}/.config}/$TOOLBOX_NAME"
+	state_fallback=1
+fi
 
 export TOOLBOX_ROOT="$state"
 export HOME="$state/home"
@@ -63,6 +82,10 @@ seed() {
 }
 
 if [ ! -e "$state/.stamp" ]; then
+	if [ -n "$state_fallback" ]; then
+		printf '%s: %s is not writable, keeping state in %s instead\n' \
+			"$TOOLBOX_NAME" "$root" "$state" >&2
+	fi
 	seed
 elif [ "$(cat "$state/.stamp")" != "$TOOLBOX_STAMP" ]; then
 	printf '%s: state in %s was seeded by a different build; run --reseed to refresh configs\n' \
@@ -83,7 +106,8 @@ $TOOLBOX_NAME -- portable debug toolbox
   --purge     delete the state directory
   --help      this
 
-State lives in $state
+State lives in $state (next to the image, or in \$XDG_CONFIG_HOME when that
+folder is read-only; set TOOLBOX_STATE to put it elsewhere).
 Delete it (or the whole folder) and nothing of this toolbox remains on the host.
 EOF
 }

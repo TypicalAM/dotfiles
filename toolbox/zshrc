@@ -33,6 +33,30 @@ export PATH="$TOOLBOX_ENV/bin:$HOME/bin:$PATH"
 # `toolbox -c '...'` also sources this file (so aliases and functions work), but
 # there is no line editor there and the plugin inits would spew errors.
 if [ -n "${TOOLBOX_SHELL_SESSION-}" ] && [[ -o zle ]]; then
+	# An AppImage started from in here dies in its runtime with a FUSE error
+	# before any of its own code runs: fusermount3 is not allowed to mount from
+	# inside the toolbox's user namespace. So refuse it at the prompt instead,
+	# and say why. Defined before the plugins so syntax highlighting wraps it.
+	zmodload zsh/system
+	_toolbox_accept_line() {
+		local -a words=(${(z)BUFFER})
+		local cmd=${words[1]-} file magic
+		if [[ $cmd == */* ]]; then file=${~cmd}; else file=$(whence -p -- "$cmd"); fi
+		if [[ -n $file && -f $file && -x $file ]] &&
+			sysread -s 11 magic <"$file" 2>/dev/null && [[ ${magic[9,11]} == $'AI\x02' ]]; then
+			print -s -- "$BUFFER"
+			print
+			if [[ -n ${APPIMAGE-} && $file -ef $APPIMAGE ]]; then
+				print -P "%F{yellow}${TOOLBOX_NAME}: already inside ${TOOLBOX_NAME} (state: ${TOOLBOX_ROOT}); exit to get back to the host%f"
+			else
+				print -P "%F{yellow}${TOOLBOX_NAME}: ${cmd} is an AppImage, which cannot mount inside ${TOOLBOX_NAME} (no FUSE in its namespace); run it from the host%f"
+			fi
+			BUFFER=
+		fi
+		zle .accept-line
+	}
+	zle -N accept-line _toolbox_accept_line
+
 	source @autosuggestions@
 	source @syntaxhighlighting@
 

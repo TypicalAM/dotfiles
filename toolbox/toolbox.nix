@@ -84,19 +84,47 @@ let
   nvimRepos = import ./nvim-plugins.nix;
   nvimUnmapped = builtins.filter (n: !(nvimRepos ? ${n})) (builtins.attrNames nvimLock);
 
+  fetchNvimPlugin = name: builtins.fetchGit {
+    url = "https://github.com/${nvimRepos.${name}}";
+    ref = nvimLock.${name}.branch;
+    rev = nvimLock.${name}.commit;
+  };
+
   nvimPlugins =
     assert lib.assertMsg (nvimUnmapped == [ ])
       "toolbox/nvim-plugins.nix has no repo for: ${lib.concatStringsSep ", " nvimUnmapped}";
-    pkgs.linkFarm "toolbox-nvim-plugins" (lib.mapAttrsToList
-      (name: lock: {
-        inherit name;
-        path = builtins.fetchGit {
-          url = "https://github.com/${nvimRepos.${name}}";
-          ref = lock.branch;
-          rev = lock.commit;
-        };
-      })
-      nvimLock);
+    pkgs.linkFarm "toolbox-nvim-plugins" (map
+      (name: { inherit name; path = fetchNvimPlugin name; })
+      (builtins.attrNames nvimLock));
+
+  # Compiled tree-sitter parsers, laid out like nvim-treesitter's own install
+  # dir: parser/<lang>.so plus parser-info/<lang>.revision. With both present
+  # ensure_installed finds nothing to do and :TSUpdate sees them as current.
+  # Revisions come from the locked plugin's lockfile.json, so parsers and
+  # queries stay in step.
+  tsLock = lib.importJSON "${fetchNvimPlugin "nvim-treesitter"}/lockfile.json";
+  tsParsers = import ./treesitter-parsers.nix;
+  # a tarball of the exact revision: some locked revisions are on no branch
+  # fetchGit would look in, and the repos' history is large
+  tsParserSrc = lang:
+    let repo = lib.splitString "/" tsParsers.${lang}.repo; in
+    builtins.fetchTree {
+      type = "github";
+      owner = builtins.elemAt repo 0;
+      repo = builtins.elemAt repo 1;
+      rev = tsLock.${lang}.revision;
+    };
+
+  tsParsersBuilt = pkgs.runCommandCC "toolbox-treesitter-parsers" { } ''
+    mkdir -p $out/parser $out/parser-info
+    ${lib.concatStrings (lib.mapAttrsToList (lang: p: ''
+      src=${tsParserSrc lang}/${p.location or "."}/src
+      $CC -shared -fPIC -Os -I$src $src/parser.c \
+        $(test -e $src/scanner.c && echo $src/scanner.c) \
+        -o $out/parser/${lang}.so
+      echo ${tsLock.${lang}.revision} >$out/parser-info/${lang}.revision
+    '') tsParsers)}
+  '';
 
   seed = pkgs.runCommand "${imageName}-seed" { } ''
     mkdir -p $out/config $out/data/nvim $out/home/.bashrc.d $out/home/bin
@@ -120,6 +148,9 @@ let
     done
 
     chmod -R u+w $out
+
+    cp -RL ${tsParsersBuilt}/. $out/data/nvim/lazy/nvim-treesitter/
+    chmod -R u+w $out/data/nvim/lazy/nvim-treesitter
 
     # btop.conf hardcodes color_theme as an absolute path from whichever host it
     # was written on, so inside the image it silently falls back to the default
@@ -157,6 +188,8 @@ let
   # points sbomnix at it. The nvim plugins are the exception: seed copies them
   # out of the store, dropping the references, and they have no nix version
   # anyway. These CycloneDX components cover them, keyed by the locked commit.
+  # The compiled tree-sitter parsers are copied the same way, so they are listed
+  # here too.
   nvimSbomComponents = lib.mapAttrsToList
     (name: lock:
       let repo = nvimRepos.${name}; in {
@@ -168,7 +201,18 @@ let
         externalReferences = [{ type = "vcs"; url = "https://github.com/${repo}"; }];
         properties = [{ name = "lazy-lock:branch"; value = lock.branch; }];
       })
-    nvimLock;
+    nvimLock
+  ++ lib.mapAttrsToList
+    (lang: p:
+      let rev = tsLock.${lang}.revision; in {
+        type = "library";
+        bom-ref = "treesitter-parser:${lang}";
+        name = "tree-sitter-${lang}";
+        version = rev;
+        purl = "pkg:github/${lib.toLower p.repo}@${rev}";
+        externalReferences = [{ type = "vcs"; url = "https://github.com/${p.repo}"; }];
+      })
+    tsParsers;
 in
 {
   inherit env seed entrypoint appimage paths nvimSbomComponents;

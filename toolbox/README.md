@@ -93,6 +93,11 @@ Configs are copied out of the read-only squashfs, so they stay editable.
 
 Verified: a full session plus `nvim +Lazy! sync` adds nothing to the real `$HOME`.
 
+When the image's folder is not writable (installed into `/usr/bin` on an
+image-based system), the state goes to `$XDG_CONFIG_HOME/<name>` (or
+`~/.config/<name>`) instead, and the first run says so. `TOOLBOX_STATE=<dir>`
+overrides both.
+
 `--where` prints the state dir, `--purge` deletes it, `--reseed` re-copies configs
 after a rebuild (overwrites, does not merge).
 
@@ -110,9 +115,12 @@ Tested on NixOS, Ubuntu 24.04 (glibc) and Alpine 3.21 (musl), both ways.
 - nvim's lazy.nvim plugins are prefetched at build time at the commits in
   `lazy-lock.json` (~29 MB) and seeded into the state dir, so nvim starts
   offline. A new plugin needs its repo added to `nvim-plugins.nix`; the build
-  fails naming it otherwise. Treesitter parsers are not prefetched yet: offline,
-  `ensure_installed` fails to download them and those languages fall back to
-  regex highlighting.
+  fails naming it otherwise.
+- The tree-sitter parsers in `ensure_installed` are compiled at build time, at
+  the revisions in the locked nvim-treesitter's `lockfile.json`, so the target
+  needs neither network nor a C compiler for them. A language added to
+  `ensure_installed` also needs a line in `treesitter-parsers.nix`; until then
+  nvim tries to download and compile it on first start.
 - Some dotfiles hardcode host paths. `btop.conf`'s `color_theme` is rewritten to
   a bare theme name at build time because it degrades silently; the rest are left
   alone and only fail when invoked — `aliases.sh:33`, `functions.sh:48,62,92,101`,
