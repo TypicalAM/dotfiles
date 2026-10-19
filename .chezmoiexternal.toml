@@ -1,0 +1,15 @@
+# Ranger plugins (previously git submodules under the old stow layout)
+[".config/ranger/plugins/devicons2"]
+    type = "git-repo"
+    url = "https://github.com/cdump/ranger-devicons2.git"
+    refreshPeriod = "168h"
+
+[".config/ranger/plugins/ranger_fzf_filter"]
+    type = "git-repo"
+    url = "https://github.com/MuXiu1997/ranger-fzf-filter.git"
+    refreshPeriod = "168h"
+
+[".config/ranger/plugins/ranger-archives"]
+    type = "git-repo"
+    url = "https://github.com/maximtrp/ranger-archives.git"
+    refreshPeriod = "168h"
